@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PCT-Data>
+  <PCT-Data_input>
+    <PCT-InputData>
+      <PCT-InputData_query>
+        <PCT-Query>
+          <PCT-Query_type>
+            <PCT-QueryType>
+              <PCT-QueryType_asd>
+                <PCT-QueryAssayDescription>
+                  <PCT-QueryAssayDescription_aid>1200</PCT-QueryAssayDescription_aid>
+                  <PCT-QueryAssayDescription_get-name value="true"/>
+                  <PCT-QueryAssayDescription_get-description value="true"/>
+                  <PCT-QueryAssayDescription_get-protocol value="true"/>
+                  <PCT-QueryAssayDescription_get-comment value="true"/>
+                  <PCT-QueryAssayDescription_get-columns value="true"/>
+                  <PCT-QueryAssayDescription_get-method value="true"/>
+                  <PCT-QueryAssayDescription_get-target value="true"/>
+                  <PCT-QueryAssayDescription_get-version value="true"/>
+                </PCT-QueryAssayDescription>
+              </PCT-QueryType_asd>
+            </PCT-QueryType>
+          </PCT-Query_type>
+        </PCT-Query>
+      </PCT-InputData_query>
+    </PCT-InputData>
+  </PCT-Data_input>
+</PCT-Data>

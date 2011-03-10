@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="1"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="6" id="2"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="3" id="3"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="4"/>
+	
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="2" id="5">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="200000" fair="false"/>
+	</driverFactory>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="15" id="6">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="200000" fair="false"/>
+	</driverFactory>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="7"/>
+	
+	
+	<stage driverFactoryId="1" className="edu.scripps.fl.pipeline.UngroupStage"/>
+    <stage driverFactoryId="2" className="edu.scripps.fl.pubchem.app.results.DeleteResultsStage"/>
+    <stage driverFactoryId="3" className="edu.scripps.fl.pubchem.app.results.PugCsvDownloadStage"/>
+    <stage driverFactoryId="4" className="edu.scripps.fl.pubchem.app.results.CsvReaderStage"/>
+    <stage driverFactoryId="5" className="edu.scripps.fl.pubchem.app.results.CsvRecordStage"/>
+    <stage driverFactoryId="6" className="edu.scripps.fl.pubchem.app.results.CommitAssayResultStage" commitFrequency="10"/>
+    <stage driverFactoryId="7" className="edu.scripps.fl.pubchem.app.results.CommitAssayStage" commitFrequency="1"/>
+    
+</pipeline>

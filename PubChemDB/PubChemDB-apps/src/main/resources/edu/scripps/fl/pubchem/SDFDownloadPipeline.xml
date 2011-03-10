@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+
+	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="1"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="3" id="2"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="3"/>
+	
+	<stage className="edu.scripps.fl.pipeline.GroupStage" groupSize="10000" driverFactoryId="1"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.cids.FetchSDFStage" driverFactoryId="2"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.cids.ImportSDFStage" driverFactoryId="3" 
+    tableName="PCCompound" 
+    fieldConnections="CID=PUBCHEM_COMPOUND_CID;h_bond_acceptors=PUBCHEM_CACTVS_HBOND_ACCEPTOR;h_bond_donors=PUBCHEM_CACTVS_HBOND_DONOR;iupac_name=PUBCHEM_IUPAC_NAME;traditional_name=PUBCHEM_IUPAC_TRADITIONAL_NAME;rotatable_bonds=PUBCHEM_CACTVS_ROTATABLE_BOND;xlogp=PUBCHEM_XLOGP3;total_charge=PUBCHEM_TOTAL_CHARGE;tpsa=PUBCHEM_CACTVS_TPSA;exact_weight=PUBCHEM_EXACT_MASS"
+    />
+</pipeline>

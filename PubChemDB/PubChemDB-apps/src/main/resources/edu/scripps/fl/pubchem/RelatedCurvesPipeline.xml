@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="1"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1" id="2"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="2" id="3"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="10" id="4"/>
+	
+	<stage className="edu.scripps.fl.pipeline.UngroupStage" driverFactoryId="1"/>
+	
+	<stage className="edu.scripps.fl.pubchem.app.curves.AIDStage" driverFactoryId="2"/>
+	
+    <stage className="edu.scripps.fl.pubchem.app.curves.CalculateCurveStage" driverFactoryId="3"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.curves.CommitCurveStage" driverFactoryId="4"/>
+    
+</pipeline>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>PubChemDB</artifactId>
+		<groupId>edu.scripps</groupId>
+		<version>20110228</version>
+	</parent>
+	<groupId>edu.scripps</groupId>
+	<artifactId>PubChemDB-core</artifactId>
+	<version>20110228</version>
+	<name>PubChemDB-core</name>
+	<url>http://maven.apache.org</url>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.5.1-Final</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>1.2.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.0.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency> <!--  local dependency in src/repository -->
+			<groupId>com.csvreader</groupId>
+			<artifactId>csvreader</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<!--
+				maven dependency download from http://code.google.com/p/curve-fit/
+			-->
+			<groupId>edu.scripps</groupId>
+			<artifactId>curvefit</artifactId>
+			<version>20101015</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.java-persistence
+			</groupId>
+			<artifactId>jpa-api</artifactId>
+			<version>2.0-cr-1</version>
+		</dependency>
+		<dependency> <!--  local dependency in src/repository -->
+			<groupId>gov.nih.nlm.ncbi</groupId>
+			<artifactId>ncbi-eutils-axis2</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency> <!--  local dependency in src/repository -->
+			<groupId>gov.nih.nlm.ncbi</groupId>
+			<artifactId>ncbi-pugsoap-axis2</artifactId>
+			<version>20090424</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-vfs</groupId>
+			<artifactId>commons-vfs</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1-beta1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.1-beta1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency> <!-- required by dom4j -->
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1</version>
+		</dependency>
+	</dependencies>
+</project>

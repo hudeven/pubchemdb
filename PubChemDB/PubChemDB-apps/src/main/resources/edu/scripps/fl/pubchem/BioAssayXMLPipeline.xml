@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="driverFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="readDocumentFactory">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="100" fair="false"/>
+	</driverFactory>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" 
+		numThreads="10" id="processDocumentFactory"/>
+		
+	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="saveXRefsFactory"/>
+	
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" 
+		numThreads="10" id="saveAssayFactory"/>
+	
+	<stage className="edu.scripps.fl.pipeline.UngroupStage" driverFactoryId="driverFactory"/>
+	
+    <stage className="edu.scripps.fl.pubchem.app.assayxml.ReadDocumentStage" driverFactoryId="readDocumentFactory"/>
+
+    <stage className="edu.scripps.fl.pubchem.app.assayxml.ProcessDocumentStage" driverFactoryId="processDocumentFactory"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.assayxml.SaveXRefsStage" driverFactoryId="saveXRefsFactory"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.assayxml.SaveAssayStage" driverFactoryId="saveAssayFactory"/>
+    
+    
+</pipeline>

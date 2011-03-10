@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory"
+	    numThreads="3" id="downloadFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory"
+	    numThreads="3" id="deleteFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory"
+	    numThreads="3" id="documentFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" 
+		numThreads="8" id="processFactory"/>
+	
+	<stage className="edu.scripps.fl.pubchem.app.relations.ELinkStage" driverFactoryId="downloadFactory"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.relations.DeleteRelationsStage" driverFactoryId="deleteFactory"/>
+    
+    <stage className="edu.scripps.fl.pubchem.app.util.DocumentStage" driverFactoryId="documentFactory"/>
+
+    <stage className="edu.scripps.fl.pubchem.app.relations.ProcessRelationsStage" driverFactoryId="processFactory"/>
+    
+</pipeline>
