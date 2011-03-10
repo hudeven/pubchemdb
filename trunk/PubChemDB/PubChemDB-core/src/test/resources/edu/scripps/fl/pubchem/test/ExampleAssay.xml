@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<PC-AssayContainer
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem.xsd"
+>
+  <PC-AssaySubmit>
+    <PC-AssaySubmit_assay>
+      <PC-AssaySubmit_assay_descr>
+        <PC-AssayDescription>
+          <PC-AssayDescription_aid>
+            <PC-ID>
+              <PC-ID_id>0</PC-ID_id>
+              <PC-ID_version>0</PC-ID_version>
+            </PC-ID>
+          </PC-AssayDescription_aid>
+          <PC-AssayDescription_aid-source>
+            <PC-Source>
+              <PC-Source_db>
+                <PC-DBTracking>
+                  <PC-DBTracking_name>The Scripps Research Institute Molecular Screening Center</PC-DBTracking_name>
+                  <PC-DBTracking_source-id>
+                    <Object-id>
+                      <Object-id_str>Unique assay identifier, e.g. &apos;Assay 1&apos;</Object-id_str>
+                    </Object-id>
+                  </PC-DBTracking_source-id>
+                   <PC-DBTracking_date>
+                    <Date>
+                      <Date_std>
+                        <Date-std>
+                          <Date-std_year>2012</Date-std_year>
+                          <Date-std_month>1</Date-std_month>
+                          <Date-std_day>25</Date-std_day>
+                        </Date-std>
+                      </Date_std>
+                    </Date>
+                  </PC-DBTracking_date>
+                </PC-DBTracking>
+              </PC-Source_db>
+            </PC-Source>
+          </PC-AssayDescription_aid-source>
+          <PC-AssayDescription_name>Name of the assay, e.g. &apos;Allosteric Modulators of D1 Receptors&apos;</PC-AssayDescription_name>
+          <PC-AssayDescription_description>
+            <PC-AssayDescription_description_E>PubChem bioassay description can be entered either here or via categorized comments CSV file</PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E></PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E>Below is an example of description..</PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E></PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E>Dopamine receptors have been classified into two large families, the D1-like and the D2-like (Neve et al., 2004). Members of the D1-like receptor family include D1 and D5 dopamine receptors. Activation of D1-like receptors stimulate Gs which in turn activates adenylate cyclase resulting in enhanced cyclic AMP accumulation (Neve et al., 2004). Members of the D2-like receptor family include D2, D3, and D4 dopamine receptors. Activation of D2-like dopamine receptors is often linked to inhibition of drug-stimulated cyclic AMP accumulation (Watts et al., 1999, Watts et al., 1998). The field of dopamine research greatly benefited in the latter part of the last century by the availability of dopamine D2 agonists and antagonists. Indeed, the &apos;dopamine hypothesis&apos; of schizophrenia resulted directly from the availability of D2 dopamine antagonists and their value in attenuating the symptoms of schizophrenia. Intense research into the importance of D2-like receptors resulted in a large variety of D2-like agonists and antagonists. By contrast, dopamine D1 (D1A)receptors had not been considered important until about 15 years ago, and no one today yet knows the importance of D5 (D1b) dopamine receptors.</PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E>The discovery of D1 dopamine receptor-selective allosteric modulators would certainly provide important tools for neuropharmacology (Schetz, 2005). Although an individual allosteric modulator could either reduce or enhance the agonist-stimulated receptor signal, an allosteric potentiator of D1 receptor signaling is highly desirable. There are several potential clinical uses for allosteric potentiators of D1 receptor signaling that relate to the treatment of Parkinson#s disease (PD). For example, an allosteric potentiator of D1 receptors could serve as the drug of first choice in the initial stages of PD. This allosteric potentiator would serve to enhance the functional activity of the remaining levels of dopamine in the striatum. Moreover, an allosteric potentiator would be activity-dependent and have actions only during the presence of released dopamine providing a more natural pattern of D1 dopamine receptor activation. An allosteric potentiator of D1 receptors could also be used in combination therapy with L-DOPA. This therapeutic approach would allow clinicians to initiate dopamine-replacement therapy with lower doses of L-DOPA, reducing immediately the important and dose-limiting side effects on the cardiovascular system (i.e. arrhythmias and hypotension) as well as the gastrointestinal system (i.e. nausea and vomiting).</PC-AssayDescription_description_E>
+            <PC-AssayDescription_description_E>The goal of this screening campaign was to test confirmed active compounds for their ability to modulate the D1 receptor in a dose-dependent fashion in the presence of an EC30 of dopamine. Samples were tested in triplicate for this assay.</PC-AssayDescription_description_E>
+          </PC-AssayDescription_description>
+          <PC-AssayDescription_protocol>
+            <PC-AssayDescription_protocol_E>PubChem bioassay protocol can be entered either here or via categorized comments CSV file</PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E></PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E>Below is an example of protocol..</PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E></PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E>1. Human Embryonic Kidney Cells (HEKs) containing human D1 receptor were seeded at 35,000 cells/well in Greiner black, solid bottom poly-lysine coated 384-well plates (Cat#781947) in Dulbecco&apos;s modified medium (DMEM) containing 5% Fetalclone I serum (Hyclone), 5% iron-supplemented bovine calf serum (Hyclone), 0.05 U/ml penicillin, and 50 mg/ml streptomycin (Gibco).</PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E>2. Cell plates were incubated overnight at 37 degrees C in 5% CO2.</PC-AssayDescription_protocol_E>
+            <PC-AssayDescription_protocol_E>3. Media was removed and 10 uL of test compound at 20 uM was added in assay buffer (Optimem + 0.1% Ascorbic Acid).</PC-AssayDescription_protocol_E>
+          </PC-AssayDescription_protocol>
+          <PC-AssayDescription_comment>
+            <PC-AssayDescription_comment_E>PubChem bioassay comments can be entered either here or via categorized comments CSV file</PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E></PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E>Comments field..</PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E>Usualy in this section depositors describe how they derived _x000D_</PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E>scores and define outcome based on score threshold.</PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E>Replicate group measurements for each compound were treated independently rather than averaged over the replicates.</PC-AssayDescription_comment_E>
+            <PC-AssayDescription_comment_E>The activity score was assigned as 100 when 2 or 3 out of the 3 replicates were considered &apos;fit.&apos; The score was assigned as 50 when 2 or 3 of 3 replicates were considered &apos;trend&apos; or if one &apos;fit,&apos; one &apos;trend,&apos; and one &apos;no fit&apos; existed for a set of replicates. A score of 0 was assigned when fewer than 2 of 3 replicates gave either &apos;fit&apos; or &apos;trend.&apos;</PC-AssayDescription_comment_E>
+          </PC-AssayDescription_comment>
+          <PC-AssayDescription_xref>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_aid>858</PC-XRefData_aid>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>Confirmatory assay</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_taxonomy>9606</PC-XRefData_taxonomy>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>human sequences</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_aid>641</PC-XRefData_aid>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>Screening assay</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_dburl>http://www.yoursite.com</PC-XRefData_dburl>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>My home page</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_pmid>15974933</PC-XRefData_pmid>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>Allosteric modulation of dopamine receptors, Schetz JA., Mini Rev Med Chem. 2005 Jun; 5(6):555-61</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_gene>1812</PC-XRefData_gene>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>DRD1 dopamine receptor D1 [ Homo sapiens ]</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+            <PC-AnnotatedXRef>
+              <PC-AnnotatedXRef_xref>
+                <PC-XRefData>
+                  <PC-XRefData_pmid>12021390</PC-XRefData_pmid>
+                </PC-XRefData>
+              </PC-AnnotatedXRef_xref>
+              <PC-AnnotatedXRef_comment>Dopamine receptor signaling, Neve KA, Seamans JK, J Recept Signal Transduct. 2004 Aug; 24(3):165-205</PC-AnnotatedXRef_comment>
+            </PC-AnnotatedXRef>
+          </PC-AssayDescription_xref>
+          <PC-AssayDescription_results>
+            <PC-ResultType>
+              <PC-ResultType_tid>1</PC-ResultType_tid>
+              <PC-ResultType_name>Hit Confirmation</PC-ResultType_name>
+              <PC-ResultType_description>
+                <PC-ResultType_description_E>Confirmed by individial siRNA in Bmac1_dLuc</PC-ResultType_description_E>
+              </PC-ResultType_description>
+              <PC-ResultType_type value="int">2</PC-ResultType_type>
+              <PC-ResultType_unit value="none">254</PC-ResultType_unit>
+              <PC-ResultType_panel-info>
+                <PC-AssayPanelTestResult>
+                  <PC-AssayPanelTestResult_mid>1</PC-AssayPanelTestResult_mid>
+                  <PC-AssayPanelTestResult_readout-annot value="outcome">2</PC-AssayPanelTestResult_readout-annot>
+                </PC-AssayPanelTestResult>
+              </PC-ResultType_panel-info>
+            </PC-ResultType>
+            <PC-ResultType>
+              <PC-ResultType_tid>2</PC-ResultType_tid>
+              <PC-ResultType_name>Phenotype</PC-ResultType_name>
+              <PC-ResultType_description>
+                <PC-ResultType_description_E>Biological effect type</PC-ResultType_description_E>
+              </PC-ResultType_description>
+              <PC-ResultType_type value="string">4</PC-ResultType_type>
+              <PC-ResultType_unit value="none">254</PC-ResultType_unit>
+              <PC-ResultType_panel-info>
+                <PC-AssayPanelTestResult>
+                  <PC-AssayPanelTestResult_mid>2</PC-AssayPanelTestResult_mid>
+                  <PC-AssayPanelTestResult_readout-annot value="regular">1</PC-AssayPanelTestResult_readout-annot>
+                </PC-AssayPanelTestResult>
+              </PC-ResultType_panel-info>
+            </PC-ResultType>
+            <PC-ResultType>
+              <PC-ResultType_tid>3</PC-ResultType_tid>
+              <PC-ResultType_name>replicate1_readout_0_hr</PC-ResultType_name>
+              <PC-ResultType_description>
+                <PC-ResultType_description_E>bioluminescence measurement</PC-ResultType_description_E>
+              </PC-ResultType_description>
+              <PC-ResultType_type value="float">1</PC-ResultType_type>
+              <PC-ResultType_unit value="percent">15</PC-ResultType_unit>
+              <PC-ResultType_panel-info>
+                <PC-AssayPanelTestResult>
+                  <PC-AssayPanelTestResult_mid>3</PC-AssayPanelTestResult_mid>
+                  <PC-AssayPanelTestResult_readout-annot value="regular">1</PC-AssayPanelTestResult_readout-annot>
+                </PC-AssayPanelTestResult>
+              </PC-ResultType_panel-info>
+            </PC-ResultType>
+            <PC-ResultType>
+              <PC-ResultType_tid>4</PC-ResultType_tid>
+              <PC-ResultType_name>replicate1_readout_2_hr</PC-ResultType_name>
+              <PC-ResultType_description>
+                <PC-ResultType_description_E>bioluminescence measurement</PC-ResultType_description_E>
+              </PC-ResultType_description>
+              <PC-ResultType_type value="float">1</PC-ResultType_type>
+              <PC-ResultType_unit value="percent">15</PC-ResultType_unit>
+              <PC-ResultType_panel-info>
+                <PC-AssayPanelTestResult>
+                  <PC-AssayPanelTestResult_mid>4</PC-AssayPanelTestResult_mid>
+                  <PC-AssayPanelTestResult_readout-annot value="score">3</PC-AssayPanelTestResult_readout-annot>
+                </PC-AssayPanelTestResult>
+              </PC-ResultType_panel-info>
+            </PC-ResultType>
+            <PC-ResultType>
+              <PC-ResultType_tid>5</PC-ResultType_tid>
+              <PC-ResultType_name>replicate1_readout_4_hr</PC-ResultType_name>
+              <PC-ResultType_description>
+                <PC-ResultType_description_E>bioluminescence measurement</PC-ResultType_description_E>
+              </PC-ResultType_description>
+              <PC-ResultType_type value="float">1</PC-ResultType_type>
+              <PC-ResultType_unit value="percent">15</PC-ResultType_unit>
+              <PC-ResultType_panel-info>
+                <PC-AssayPanelTestResult>
+                  <PC-AssayPanelTestResult_mid>4</PC-AssayPanelTestResult_mid>
+                  <PC-AssayPanelTestResult_readout-annot value="ac">4</PC-AssayPanelTestResult_readout-annot>
+                </PC-AssayPanelTestResult>
+              </PC-ResultType_panel-info>
+            </PC-ResultType>
+          </PC-AssayDescription_results>
+          <PC-AssayDescription_revision>0</PC-AssayDescription_revision>
+          <PC-AssayDescription_target>
+            <PC-AssayTargetInfo>
+              <PC-AssayTargetInfo_name>D(1A) dopamine receptor [Homo sapiens]</PC-AssayTargetInfo_name>
+              <PC-AssayTargetInfo_mol-id>299681</PC-AssayTargetInfo_mol-id>
+              <PC-AssayTargetInfo_molecule-type value="protein">1</PC-AssayTargetInfo_molecule-type>
+              <PC-AssayTargetInfo_organism>
+                <BioSource>
+                  <BioSource_org>
+                    <Org-ref>
+                      <Org-ref_taxname>Homo sapiens</Org-ref_taxname>
+                      <Org-ref_common>human</Org-ref_common>
+                      <Org-ref_db>
+                        <Dbtag>
+                          <Dbtag_db>taxon</Dbtag_db>
+                          <Dbtag_tag>
+                            <Object-id>
+                              <Object-id_id>9606</Object-id_id>
+                            </Object-id>
+                          </Dbtag_tag>
+                        </Dbtag>
+                      </Org-ref_db>
+                    </Org-ref>
+                  </BioSource_org>
+                </BioSource>
+              </PC-AssayTargetInfo_organism>
+            </PC-AssayTargetInfo>
+          </PC-AssayDescription_target>
+          <PC-AssayDescription_activity-outcome-method value="other">0</PC-AssayDescription_activity-outcome-method>
+          <PC-AssayDescription_grant-number>
+            <PC-AssayDescription_grant-number_E>123456</PC-AssayDescription_grant-number_E>
+          </PC-AssayDescription_grant-number>
+          <PC-AssayDescription_project-category value="literature-author">8</PC-AssayDescription_project-category>
+          <PC-AssayDescription_is-panel value="true"/>
+          <PC-AssayDescription_panel-info>
+            <PC-AssayPanel>
+              <PC-AssayPanel_name>name</PC-AssayPanel_name>
+              <PC-AssayPanel_descr>desc</PC-AssayPanel_descr>
+              <PC-AssayPanel_member>
+                <PC-AssayPanelMember>
+                  <PC-AssayPanelMember_mid>1</PC-AssayPanelMember_mid>
+                  <PC-AssayPanelMember_name>Panel 1</PC-AssayPanelMember_name>
+                  <PC-AssayPanelMember_description>a</PC-AssayPanelMember_description>
+                  <PC-AssayPanelMember_protocol>
+                    <PC-AssayPanelMember_protocol_E>a</PC-AssayPanelMember_protocol_E>
+                  </PC-AssayPanelMember_protocol>
+                  <PC-AssayPanelMember_comment>
+                    <PC-AssayPanelMember_comment_E>a</PC-AssayPanelMember_comment_E>
+                  </PC-AssayPanelMember_comment>
+                  <PC-AssayPanelMember_target>
+                    <PC-AssayTargetInfo>
+                      <PC-AssayTargetInfo_name>a</PC-AssayTargetInfo_name>
+                      <PC-AssayTargetInfo_mol-id>13272532</PC-AssayTargetInfo_mol-id>
+                      <PC-AssayTargetInfo_molecule-type value="protein">1</PC-AssayTargetInfo_molecule-type>
+                    </PC-AssayTargetInfo>
+                  </PC-AssayPanelMember_target>
+                  <PC-AssayPanelMember_xref>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_taxonomy>9606</PC-XRefData_taxonomy>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_gene>6774</PC-XRefData_gene>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                  </PC-AssayPanelMember_xref>
+                </PC-AssayPanelMember>
+                <PC-AssayPanelMember>
+                  <PC-AssayPanelMember_mid>2</PC-AssayPanelMember_mid>
+                  <PC-AssayPanelMember_name>Panel 2</PC-AssayPanelMember_name>
+                  <PC-AssayPanelMember_description>a</PC-AssayPanelMember_description>
+                  <PC-AssayPanelMember_protocol>
+                    <PC-AssayPanelMember_protocol_E>a</PC-AssayPanelMember_protocol_E>
+                  </PC-AssayPanelMember_protocol>
+                  <PC-AssayPanelMember_comment>
+                    <PC-AssayPanelMember_comment_E>a</PC-AssayPanelMember_comment_E>
+                  </PC-AssayPanelMember_comment>
+                  <PC-AssayPanelMember_target>
+                    <PC-AssayTargetInfo>
+                      <PC-AssayTargetInfo_name>a</PC-AssayTargetInfo_name>
+                      <PC-AssayTargetInfo_mol-id>6274552</PC-AssayTargetInfo_mol-id>
+                      <PC-AssayTargetInfo_molecule-type value="protein">1</PC-AssayTargetInfo_molecule-type>
+                    </PC-AssayTargetInfo>
+                  </PC-AssayPanelMember_target>
+                  <PC-AssayPanelMember_xref>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_taxonomy>9606</PC-XRefData_taxonomy>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_gene>6772</PC-XRefData_gene>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                  </PC-AssayPanelMember_xref>
+                </PC-AssayPanelMember>
+                <PC-AssayPanelMember>
+                  <PC-AssayPanelMember_mid>3</PC-AssayPanelMember_mid>
+                  <PC-AssayPanelMember_name>Panel 3</PC-AssayPanelMember_name>
+                  <PC-AssayPanelMember_description>a</PC-AssayPanelMember_description>
+                  <PC-AssayPanelMember_protocol>
+                    <PC-AssayPanelMember_protocol_E>a</PC-AssayPanelMember_protocol_E>
+                  </PC-AssayPanelMember_protocol>
+                  <PC-AssayPanelMember_comment>
+                    <PC-AssayPanelMember_comment_E>a</PC-AssayPanelMember_comment_E>
+                  </PC-AssayPanelMember_comment>
+                  <PC-AssayPanelMember_xref>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_taxonomy>9606</PC-XRefData_taxonomy>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                  </PC-AssayPanelMember_xref>
+                </PC-AssayPanelMember>
+                <PC-AssayPanelMember>
+                  <PC-AssayPanelMember_mid>4</PC-AssayPanelMember_mid>
+                  <PC-AssayPanelMember_name>Panel 4</PC-AssayPanelMember_name>
+                  <PC-AssayPanelMember_description>a</PC-AssayPanelMember_description>
+                  <PC-AssayPanelMember_protocol>
+                    <PC-AssayPanelMember_protocol_E>a</PC-AssayPanelMember_protocol_E>
+                  </PC-AssayPanelMember_protocol>
+                  <PC-AssayPanelMember_comment>
+                    <PC-AssayPanelMember_comment_E>a</PC-AssayPanelMember_comment_E>
+                  </PC-AssayPanelMember_comment>
+                  <PC-AssayPanelMember_target>
+                    <PC-AssayTargetInfo>
+                      <PC-AssayTargetInfo_name>a</PC-AssayTargetInfo_name>
+                      <PC-AssayTargetInfo_mol-id>164664508</PC-AssayTargetInfo_mol-id>
+                      <PC-AssayTargetInfo_molecule-type value="protein">1</PC-AssayTargetInfo_molecule-type>
+                    </PC-AssayTargetInfo>
+                  </PC-AssayPanelMember_target>
+                  <PC-AssayPanelMember_xref>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_taxonomy>9606</PC-XRefData_taxonomy>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                    <PC-AnnotatedXRef>
+                      <PC-AnnotatedXRef_xref>
+                        <PC-XRefData>
+                          <PC-XRefData_gene>602</PC-XRefData_gene>
+                        </PC-XRefData>
+                      </PC-AnnotatedXRef_xref>
+                    </PC-AnnotatedXRef>
+                  </PC-AssayPanelMember_xref>
+                </PC-AssayPanelMember>
+              </PC-AssayPanel_member>
+            </PC-AssayPanel>
+          </PC-AssayDescription_panel-info>
+          <PC-AssayDescription_categorized-comment>
+            <PC-CategorizedComment>
+              <PC-CategorizedComment_title>Result Type.Name.1</PC-CategorizedComment_title>
+              <PC-CategorizedComment_comment>
+                <PC-CategorizedComment_comment_E>RhoWT_EC50_MICROM</PC-CategorizedComment_comment_E>
+              </PC-CategorizedComment_comment>
+            </PC-CategorizedComment>
+            <PC-CategorizedComment>
+              <PC-CategorizedComment_title>Result Type.Standard.1</PC-CategorizedComment_title>
+              <PC-CategorizedComment_comment>
+                <PC-CategorizedComment_comment_E>EC50</PC-CategorizedComment_comment_E>
+              </PC-CategorizedComment_comment>
+            </PC-CategorizedComment>
+            <PC-CategorizedComment>
+              <PC-CategorizedComment_title>Result Type.Unit.1</PC-CategorizedComment_title>
+              <PC-CategorizedComment_comment>
+                <PC-CategorizedComment_comment_E>uM</PC-CategorizedComment_comment_E>
+              </PC-CategorizedComment_comment>
+            </PC-CategorizedComment>
+          </PC-AssayDescription_categorized-comment>
+        </PC-AssayDescription>
+      </PC-AssaySubmit_assay_descr>
+    </PC-AssaySubmit_assay>
+  </PC-AssaySubmit>
+</PC-AssayContainer>

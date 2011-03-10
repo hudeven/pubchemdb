@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PCT-Data>
+  <PCT-Data_input>
+    <PCT-InputData>
+      <PCT-InputData_query>
+        <PCT-Query>
+          <PCT-Query_type>
+            <PCT-QueryType>
+              <PCT-QueryType_qas>
+                <PCT-QueryActivitySummary>
+                  <PCT-QueryActivitySummary_output value="summary-table">0</PCT-QueryActivitySummary_output>
+                  <PCT-QueryActivitySummary_type value="assay-central">0</PCT-QueryActivitySummary_type>
+                  <PCT-QueryActivitySummary_aids>
+                    <PCT-QueryUids>
+                      <PCT-QueryUids_ids>
+                        <PCT-ID-List>
+                          <PCT-ID-List_db>pcassay</PCT-ID-List_db>
+                          <PCT-ID-List_uids>
+                            <PCT-ID-List_uids_E>2551</PCT-ID-List_uids_E>
+                          </PCT-ID-List_uids>
+                        </PCT-ID-List>
+                      </PCT-QueryUids_ids>
+                    </PCT-QueryUids>
+                  </PCT-QueryActivitySummary_aids>
+                </PCT-QueryActivitySummary>
+              </PCT-QueryType_qas>
+            </PCT-QueryType>
+          </PCT-Query_type>
+        </PCT-Query>
+      </PCT-InputData_query>
+    </PCT-InputData>
+  </PCT-Data_input>
+</PCT-Data>
