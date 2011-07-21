@@ -6,10 +6,13 @@
 	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
 	            capacity="100" fair="false"/>
 	</driverFactory>
-	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" 
-		numThreads="10" id="processDocumentFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="10" id="processDocumentFactory"/>
 		
-	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="saveXRefsFactory"/>
+	<driverFactory className="org.apache.commons.pipeline.driver.DedicatedThreadStageDriverFactory" id="saveXRefsFactory">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="1000" fair="false"/>
+	</driverFactory>	
 	
 	<driverFactory className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" 
 		numThreads="10" id="saveAssayFactory"/>
@@ -20,7 +23,7 @@
 
     <stage className="edu.scripps.fl.pubchem.app.assayxml.ProcessDocumentStage" driverFactoryId="processDocumentFactory"/>
     
-    <stage className="edu.scripps.fl.pubchem.app.assayxml.SaveXRefsStage" driverFactoryId="saveXRefsFactory"/>
+    <stage className="edu.scripps.fl.pubchem.app.assayxml.SaveXRefsStage" driverFactoryId="saveXRefsFactory" commitFrequency="1"/>
     
     <stage className="edu.scripps.fl.pubchem.app.assayxml.SaveAssayStage" driverFactoryId="saveAssayFactory"/>
     
