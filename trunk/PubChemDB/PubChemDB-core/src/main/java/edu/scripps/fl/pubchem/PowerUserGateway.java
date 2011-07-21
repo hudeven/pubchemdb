@@ -22,9 +22,11 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.io.DOMReader;
@@ -107,8 +109,7 @@ public class PowerUserGateway {
 	private HttpClient client;
 
 	private PowerUserGateway() {
-		client = new HttpClient();
-		client.getHostConfiguration().setHost(SITE, PORT, "http");
+		client = new DefaultHttpClient();
 	}
 
 	protected Document createStatusDocument(String requestId) throws Exception {
@@ -120,10 +121,15 @@ public class PowerUserGateway {
 	}
 
 	protected InputStream fetchResponse(Document document) throws Exception {
-		PostMethod postMethod = new PostMethod(PATH);
-		postMethod.setRequestEntity(new StringRequestEntity(document.asXML(), "text/xml", "utf-8"));
-		client.executeMethod(postMethod);
-		return postMethod.getResponseBodyAsStream();
+//		PostMethod postMethod = new PostMethod(PATH);
+//		postMethod.setRequestEntity(new StringRequestEntity(document.asXML(), "text/xml", "utf-8"));
+//		client.executeMethod(postMethod);
+//		return postMethod.getResponseBodyAsStream();
+		
+		HttpPost post = new HttpPost("http://" + SITE + PATH);
+		post.setEntity(new StringEntity(document.asXML(), "text/xml", "utf-8"));
+		HttpResponse response = client.execute(post);
+		return response.getEntity().getContent();
 	}
 
 	public URL getResponseURL() throws IOException {
