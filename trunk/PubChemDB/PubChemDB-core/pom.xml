@@ -13,7 +13,7 @@
 	<version>20110228</version>
 	<name>PubChemDB-core</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -38,15 +38,13 @@
 			<version>5.1.12</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency> <!--  local dependency in src/repository -->
+		<dependency> <!-- local dependency in src/repository -->
 			<groupId>com.csvreader</groupId>
 			<artifactId>csvreader</artifactId>
 			<version>2.0</version>
 		</dependency>
 		<dependency>
-			<!--
-				maven dependency download from http://code.google.com/p/curve-fit/
-			-->
+			<!-- maven dependency download from http://code.google.com/p/curve-fit/ -->
 			<groupId>edu.scripps</groupId>
 			<artifactId>curvefit</artifactId>
 			<version>20101015</version>
@@ -57,12 +55,12 @@
 			<artifactId>jpa-api</artifactId>
 			<version>2.0-cr-1</version>
 		</dependency>
-		<dependency> <!--  local dependency in src/repository -->
+		<dependency> <!-- local dependency in src/repository -->
 			<groupId>gov.nih.nlm.ncbi</groupId>
 			<artifactId>ncbi-eutils-axis2</artifactId>
 			<version>2.0</version>
 		</dependency>
-		<dependency> <!--  local dependency in src/repository -->
+		<dependency> <!-- local dependency in src/repository -->
 			<groupId>gov.nih.nlm.ncbi</groupId>
 			<artifactId>ncbi-pugsoap-axis2</artifactId>
 			<version>20090424</version>
@@ -101,6 +99,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>dom4j</groupId>
