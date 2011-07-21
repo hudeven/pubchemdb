@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.scripps.fl.pubchem;
+package edu.scripps.fl.pubchem.web.pug;
 
 import java.net.URL;
 import java.util.Collection;
@@ -24,8 +24,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
-import edu.scripps.fl.pubchem.PowerUserGateway.Output;
-import edu.scripps.fl.pubchem.PowerUserGateway.Type;
+import edu.scripps.fl.pubchem.web.pug.PowerUserGateway.Output;
+import edu.scripps.fl.pubchem.web.pug.PowerUserGateway.Type;
 
 /**
  * @author Mark Southern
