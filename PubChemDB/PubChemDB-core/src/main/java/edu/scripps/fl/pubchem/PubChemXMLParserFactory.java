@@ -15,9 +15,6 @@
  */
 package edu.scripps.fl.pubchem;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,18 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.GZIPInputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.collections.list.GrowthList;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.dom4j.io.DOMReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.scripps.fl.dom4j.util.Dom4jUtil;
 import edu.scripps.fl.pubchem.db.PCAssay;
 import edu.scripps.fl.pubchem.db.PCAssayColumn;
 import edu.scripps.fl.pubchem.db.PCAssayPanel;
@@ -102,24 +95,8 @@ public class PubChemXMLParserFactory {
 		return instance;
 	}
 	
-	private InputStream decompress(InputStream inputStream) throws IOException {
-		inputStream = new BufferedInputStream(inputStream);
-		inputStream.mark(1024);
-	    try {
-	    	inputStream = new GZIPInputStream(inputStream);
-	    }
-	    catch(IOException e) {
-	    	inputStream.reset();
-	    }
-	    return inputStream;
-	}
-
 	public List<PCAssay> populateAssayFromXML(InputStream inputStream, boolean includeResults) throws Exception {
-		inputStream = decompress(inputStream);
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		DOMReader reader = new DOMReader();
-		Document doc = reader.read(builder.parse(inputStream));
-		inputStream.close();
+		Document doc = Dom4jUtil.getDocument(inputStream);
 		
 //		SAXReader reader = new SAXReader();
 //		reader.addHandler("/PC-AssayContainer/PC-AssaySubmit/PC-AssaySubmit_data/PC-AssayResults", new ElementHandler() {

@@ -138,7 +138,7 @@ public class PubChemFactory {
 		return (TreeSet<Long>) getAIDs(query);
 	}
 
-	protected static String getAIDArchive(long aid) {
+	public static String getAIDArchive(long aid) {
 		long low = nextLowestMultiple(aid, 1000);
 		return String.format("%07d_%07d", low + 1, low + 1000);
 	}
@@ -146,7 +146,7 @@ public class PubChemFactory {
 	// http://mindprod.com/jgloss/round.html
 	// rounding m down to multiple of n
 	protected static long nextLowestMultiple(long m, long n) {
-		long floor = m / n * n;
+		long floor = (m-1) / n * n;
 		return floor;
 	}
 

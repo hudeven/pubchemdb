@@ -50,6 +50,26 @@ public class PUGRequest {
 		return doc;
 	}
 	
+	public static Document newBioActivitySummaryRequest(Collection scids, Type type) throws Exception {
+		URL url = PUGRequest.class.getResource("/edu/scripps/fl/pubchem/pug/PugBioActivityTableRequest.xml");
+		Document doc = PowerUserGateway.getDocument(url.openStream());
+		setResponseIds2(doc, type, scids);
+		return doc;
+	}
+	
+	private static void setResponseIds2(Document document, Type type, Collection<Object> ids) throws Exception {
+		Node node = document.selectSingleNode("//PCT-ID-List_db"); 
+		node.setText(type.getDatabase());
+		node = document.selectSingleNode(".//PCT-ID-List_uids");
+		for (Node child : (List<Node>) node.selectNodes("*"))
+			child.detach();
+		for (Object id : ids) {
+			Element aidElem = DocumentHelper.createElement("PCT-ID-List_uids_E");
+			aidElem.setText(id.toString());
+			((Element) node).add(aidElem);
+		}
+	}
+	
 	public static void setResponseIds(Document document, Type type, Collection<Object> ids) throws Exception {
 		String idTypePath = "//PCT-QueryAssayData_";
 		idTypePath += Type.AID.equals(type) ? "aids" : "scids";
