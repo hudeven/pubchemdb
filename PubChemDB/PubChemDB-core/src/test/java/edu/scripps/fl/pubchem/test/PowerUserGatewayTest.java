@@ -1,11 +1,11 @@
 package edu.scripps.fl.pubchem.test;
 
 import java.net.URL;
+import java.util.Arrays;
 
 import org.apache.log4j.xml.DOMConfigurator;
 import org.dom4j.Document;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.scripps.fl.pubchem.PUGRequest;
 import edu.scripps.fl.pubchem.PowerUserGateway;
 import edu.scripps.fl.pubchem.PowerUserGateway.Output;
@@ -50,8 +50,8 @@ public class PowerUserGatewayTest {
 	public static void main(String[] args) throws Exception {
 		DOMConfigurator.configure(PowerUserGatewayTest.class.getResource("/log4j.config.xml"));
 		PowerUserGatewayTest test = new PowerUserGatewayTest();
-//		test.testDescriptionXML();
+		test.testDescriptionXML();
 //		test.testMultiAssayDownload();
-		test.testBioAssaySummaryDownload();
+//		test.testBioAssaySummaryDownload();
 	}
 }
