@@ -1,14 +1,16 @@
 package edu.scripps.fl.pubchem;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -120,7 +122,7 @@ public class PubChemXMLWriterFactory {
 		buildPanels(doc, assay);
 		buildTargets(doc, assay);
 		buildXRefs(doc, assay);
-		buildComments(doc, assay);
+		buildComments(doc, assay.getCategorizedComments());
 		organizeXMLDoc(doc);
 		return doc;
 	}
@@ -226,12 +228,13 @@ public class PubChemXMLWriterFactory {
 		}
 	}
 
-	protected  void buildComments(Document document, PCAssay assay) {
-		Map<String, String> comments = assay.getCategorizedComments();
+	public  void buildComments(Document document, Map<String,String> comments) {
 		Set<String> keys = comments.keySet();
 		if (keys.size() > 0) {
-			Element root = (Element) document.selectSingleNode(assayDesc);
-			Element assayDescCComment = root.addElement("PC-AssayDescription_categorized-comment");
+			Element root = (Element) document.selectSingleNode("//PC-AssayDescription");
+			Element assayDescCComment = (Element) root.selectSingleNode("PC-AssayDescription_categorized-comment");
+			if( assayDescCComment == null )
+				assayDescCComment = root.addElement("PC-AssayDescription_categorized-comment");
 			for (String key : keys) {
 				Element cComment = assayDescCComment.addElement("PC-CategorizedComment");
 				cComment.addElement("PC-CategorizedComment_title").addText(key);
@@ -437,12 +440,37 @@ public class PubChemXMLWriterFactory {
 	}
 
 	public void write(PCAssay assay, File toFile) throws Exception {
-		Document doc = build(assay);
+		write(build(assay), new FileOutputStream(toFile));
+	}
+	
+	public void write(Document doc, OutputStream os) throws Exception {
 		OutputFormat format = OutputFormat.createPrettyPrint();
-		XMLWriter writer = new XMLWriter(new FileWriter(toFile), format);
+		XMLWriter writer = new XMLWriter(os, format);
 		writer.write(doc);
 		writer.close();
 	}
 	
-	
+	public void replaceComments(Document doc, Map<String,String>  comments, boolean replace) throws Exception {
+		List<Node> nodes = doc.selectNodes("//PC-AssayDescription/PC-AssayDescription_categorized-comment/PC-CategorizedComment");
+		// store existing comments and remove old nodes.
+		String separator = System.getProperty("line.separator");
+		Map<String, String> oldComments = new LinkedHashMap<String, String>();
+		for(Node node: nodes) {
+			String key = node.selectSingleNode("PC-CategorizedComment_title").getText();
+			String value = PubChemXMLParserFactory.getInstance().join(node.selectNodes("PC-CategorizedComment_comment/PC-CategorizedComment_comment_E"), separator);
+			oldComments.put(key, value);
+			node.detach();
+		}
+		
+		Map<String,String> newComments = new LinkedHashMap<String, String>();
+		newComments.putAll(comments);
+		if( ! replace ) {
+			for(String key: oldComments.keySet()) {
+				if( ! newComments.containsKey(key) )
+					newComments.put(key, oldComments.get(key));
+			}
+		}	
+		// add the comments
+		buildComments(doc, newComments);
+	}
 }
