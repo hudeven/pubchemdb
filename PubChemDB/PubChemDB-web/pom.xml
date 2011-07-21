@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>PubChemDB</artifactId>
+		<groupId>edu.scripps</groupId>
+		<version>20110228</version>
+	</parent>
+	<groupId>edu.scripps</groupId>
+	<artifactId>PubChemDB-web</artifactId>
+	<version>20110721</version>
+	<dependencies>
+		<dependency> <!-- local dependency in src/repository -->
+			<groupId>gov.nih.nlm.ncbi</groupId>
+			<artifactId>ncbi-eutils-axis2</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency> <!-- local dependency in src/repository -->
+			<groupId>gov.nih.nlm.ncbi</groupId>
+			<artifactId>ncbi-pugsoap-axis2</artifactId>
+			<version>20090424</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency> <!-- required by dom4j -->
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.htmlcleaner</groupId>
+			<artifactId>htmlcleaner</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency> <!-- local dependency in src/repository -->
+			<groupId>com.csvreader</groupId>
+			<artifactId>csvreader</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
+</project>

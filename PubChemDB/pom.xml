@@ -5,7 +5,7 @@
 
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB</artifactId>
-	<version>20110228</version>
+	<version>20110721</version>
 	<packaging>pom</packaging>
 
 	<name>PubChemDB</name>
@@ -58,7 +58,7 @@
 	</dependencies>
 	<modules>
 		<module>PubChemDB-core</module>
-		<module>PubChemDB-depo</module>
+		<module>PubChemDB-web</module>
 		<module>PubChemDB-apps</module>
 	</modules>
 </project>
