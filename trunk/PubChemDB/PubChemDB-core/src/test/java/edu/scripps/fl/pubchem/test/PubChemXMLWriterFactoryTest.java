@@ -21,7 +21,7 @@ public class PubChemXMLWriterFactoryTest {
 	private static final Logger log = LoggerFactory.getLogger(PubChemXMLWriterFactoryTest.class);
 	
 	public static void main(String[] args) throws Exception {
-		URL url = PubChemXMLWriterFactoryTest.class.getClassLoader().getResource("edu/scripps/fl/pubchem/log4j.config.xml");
+		URL url = PubChemXMLWriterFactoryTest.class.getClassLoader().getResource("log4j.config.xml");
 		DOMConfigurator.configure(url);
 		
 		PubChemXMLParserFactory pc = PubChemXMLParserFactory.getInstance();

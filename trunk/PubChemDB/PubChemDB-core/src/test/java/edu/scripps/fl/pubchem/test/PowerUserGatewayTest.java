@@ -35,10 +35,23 @@ public class PowerUserGatewayTest {
 		return true;
 	}
 	
+	public boolean testBioAssaySummaryDownload() throws Exception {
+		PowerUserGateway pug = PowerUserGateway.newInstance();
+		Document doc = PUGRequest.newBioActivitySummaryRequest(
+				Arrays.asList(new Integer[]{24892677,24892644}),
+				Type.CID);
+		pug.setRequest( doc );
+		pug.submitAndWait(5000);
+		URL url = pug.getResponseURL();
+		System.out.println(url);
+		return true;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		DOMConfigurator.configure(PowerUserGatewayTest.class.getResource("/log4j.config.xml"));
 		PowerUserGatewayTest test = new PowerUserGatewayTest();
 //		test.testDescriptionXML();
-		test.testMultiAssayDownload();
+//		test.testMultiAssayDownload();
+		test.testBioAssaySummaryDownload();
 	}
 }

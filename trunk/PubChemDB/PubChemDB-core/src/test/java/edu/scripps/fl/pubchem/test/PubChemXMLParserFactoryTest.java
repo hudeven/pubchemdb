@@ -16,7 +16,8 @@ public class PubChemXMLParserFactoryTest {
 		DOMConfigurator.configure(url);
 		PubChemXMLParserFactory pc = PubChemXMLParserFactory.getInstance();
 //		InputStream is = PubChemFactory.getInstance().getXmlDescr(Long.parseLong(args[0]));
-		FileInputStream is = new FileInputStream("H:\\Examples\\PubChem\\PUG\\AIDs 2546 and 2551 and CIDs 24892677 and 24892644.xml");
+		FileInputStream is = new FileInputStream("c:\\home\\temp\\1544.descr.xml.in");
 		List<PCAssay> assays = pc.populateAssayFromXML(is, true);
+		System.out.println(assays.size());
 	}
 }

@@ -1,0 +1,32 @@
+<PCT-Data>
+  <PCT-Data_input>
+    <PCT-InputData>
+      <PCT-InputData_query>
+        <PCT-Query>
+          <PCT-Query_type>
+            <PCT-QueryType>
+              <PCT-QueryType_qas>
+                <PCT-QueryActivitySummary>
+                  <PCT-QueryActivitySummary_output value="summary-table">0</PCT-QueryActivitySummary_output>
+                  <PCT-QueryActivitySummary_type value="compound-central">0</PCT-QueryActivitySummary_type>
+                  <PCT-QueryActivitySummary_scids>
+                    <PCT-QueryUids>
+                      <PCT-QueryUids_ids>
+                        <PCT-ID-List>
+                          <PCT-ID-List_db>[pccompound OR pcsubstance]</PCT-ID-List_db>
+                          <PCT-ID-List_uids>
+                            <PCT-ID-List_uids_E>[cid OR sid]</PCT-ID-List_uids_E>
+                          </PCT-ID-List_uids>
+                        </PCT-ID-List>
+                      </PCT-QueryUids_ids>
+                    </PCT-QueryUids>
+                  </PCT-QueryActivitySummary_scids>
+                </PCT-QueryActivitySummary>
+              </PCT-QueryType_qas>
+            </PCT-QueryType>
+          </PCT-Query_type>
+        </PCT-Query>
+      </PCT-InputData_query>
+    </PCT-InputData>
+  </PCT-Data_input>
+</PCT-Data>
