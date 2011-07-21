@@ -63,7 +63,7 @@ public class SourceColumnsInfo {
 		}
 	}
 	
-	protected long[] getSIDs(String[] row) {
+	public long[] getSIDs(String[] row) {
 		String[] sids = row[SID].split("\\s*,\\s*");
 		return (long[]) ConvertUtils.convert(sids, long.class);
 	}

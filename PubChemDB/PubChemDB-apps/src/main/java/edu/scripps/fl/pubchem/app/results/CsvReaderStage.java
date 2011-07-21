@@ -20,6 +20,7 @@ import edu.scripps.fl.pipeline.SessionStage;
 import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.db.PCAssay;
+import edu.scripps.fl.pubchem.db.PCAssayResult;
 
 public class CsvReaderStage extends SessionStage {
 	
@@ -53,12 +54,12 @@ public class CsvReaderStage extends SessionStage {
 			InputStream is = (InputStream) objs[1];
 			processDataFromResource(aid, is);
 		}
-		catch(IOException ex) {
+		catch(Exception ex) {
 			throw new StageException(this, ex);
 		}		
 	}
 	
-	protected void processDataFromResource(Integer aid, InputStream is) throws IOException {
+	protected void processDataFromResource(Integer aid, InputStream is) throws Exception {
 		
 		CsvReader reader = new CsvReader(new BufferedReader( new InputStreamReader(is)), ',');
 		reader.readHeaders();
@@ -84,7 +85,10 @@ public class CsvReaderStage extends SessionStage {
 			if( ! moreRecords ) {
 				tracker.numRecords = counter;
 			}
-			emit(new Object[]{aid, trackers, colInfo, values});
+			for(long SID: colInfo.getSIDs(values)) {
+				PCAssayResult result = colInfo.createAssayResult(SID, values);
+				emit(new Object[]{aid, trackers, result});	
+			}
 		}
 	}
 }

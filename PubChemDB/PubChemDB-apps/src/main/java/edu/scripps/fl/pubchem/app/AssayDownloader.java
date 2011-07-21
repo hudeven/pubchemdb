@@ -130,7 +130,7 @@ public class AssayDownloader {
 		Set<Long> processAids = Collections.synchronizedSortedSet(new TreeSet<Long>(aids));
 
 		List<Pipeline> pipelines = new ArrayList();
-//		pipelines.add(assayXML(processAids));
+		pipelines.add(assayXML(processAids));
 		pipelines.add(assaySummaries(processAids));
 
 		for (Pipeline pipeline : pipelines)
