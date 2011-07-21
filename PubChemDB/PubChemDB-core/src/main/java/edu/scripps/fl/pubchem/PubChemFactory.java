@@ -58,18 +58,7 @@ import edu.scripps.fl.pubchem.db.PCAssayResult;
 import edu.scripps.fl.pubchem.db.PCAssayXRef;
 import edu.scripps.fl.pubchem.db.Relation;
 import edu.scripps.fl.pubchem.db.XRef;
-import gov.nih.nlm.ncbi.pubchem.PUGStub;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.AnyKeyType;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.ArrayOfInt;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.CompressType;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.Download;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.FormatType;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.GetDownloadUrl;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.GetOperationStatus;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.GetStatusMessage;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.InputList;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.PCIDType;
-import gov.nih.nlm.ncbi.pubchem.PUGStub.StatusType;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
 
 public class PubChemFactory {
 
@@ -109,7 +98,7 @@ public class PubChemFactory {
 	}
 
 	public TreeSet<Long> getAIDs(String filter) throws Exception {
-		return (TreeSet<Long>) EUtilsFactory.getInstance().getIds(filter, "pcassay", new TreeSet<Long>(), 75000);
+		return (TreeSet<Long>) EUtilsWebSession.getInstance().getIds(filter, "pcassay", new TreeSet<Long>(), 75000);
 	}
 
 	public TreeSet<Long> getAIDs() throws Exception {
@@ -183,7 +172,7 @@ public class PubChemFactory {
 	}
 
 	public void populateAssayFromSummary(PCAssay assay) throws Exception {
-		Document document = EUtilsFactory.getInstance().getSummary(assay.getAID(), "pcassay");
+		Document document = EUtilsWebSession.getInstance().getSummary(assay.getAID(), "pcassay");
 		populateAssayFromSummaryDocument(assay, document
 				.selectSingleNode("eSummaryResult/DocumentSummarySet/DocumentSummary"));
 	}
@@ -244,7 +233,7 @@ public class PubChemFactory {
 	private static Map<String, String> unprocessedProperties = new java.util.concurrent.ConcurrentHashMap<String, String>();
 
 	public List<Long> getSummaryAID(Integer aid) throws Exception {
-		return EUtilsFactory.getInstance().getIds(aid + "[XRefAid] AND summary[activityoutcomemethod]", "pcassay");
+		return EUtilsWebSession.getInstance().getIds(aid + "[XRefAid] AND summary[activityoutcomemethod]", "pcassay");
 	}
 
 	public void populateAssayFromSummaryDocument(PCAssay assay, Node docSumNode) throws Exception {
@@ -651,7 +640,7 @@ public class PubChemFactory {
 	// }
 
 	public Collection<Long> getNeighbors(Long id) throws Exception {
-		Document document = EUtilsFactory.getInstance().getDocument(
+		Document document = EUtilsWebSession.getInstance().getDocument(
 				"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", "pcassay", "id", "" + id,
 				"linkname", "pcassay_pcassay_neighbor_list");
 		List<Node> linkSetDbs = document.selectNodes("/eLinkResult/LinkSet/LinkSetDb");
@@ -672,7 +661,7 @@ public class PubChemFactory {
 		Collection<Long> neighborAids = (Set<Long>) getNeighbors(aid);
 
 		// find summary aids for assay
-		Document doc = EUtilsFactory.getInstance().getSummary(neighborAids, "pcassay");
+		Document doc = EUtilsWebSession.getInstance().getSummary(neighborAids, "pcassay");
 		Iterator<Element> iter = doc.getRootElement().elementIterator("DocSum");
 		Long summaryAid = null;
 		List<Long> summaryAids = new ArrayList<Long>();
@@ -688,6 +677,39 @@ public class PubChemFactory {
 			neighborAids.addAll(getNeighbors(summaryAid));
 
 		return neighborAids;
+	}
+	
+	public List<Relation> getRelations(Long id, String fromDb, String toDb) throws Exception {
+		Document document = EUtilsWebSession.getInstance().getDocument(
+				"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", fromDb, "db", toDb, "id", "" + id);
+		return getRelations(document);
+	}
+
+	public List<Relation> getRelations(Document document) {
+		String fromDb = document.selectSingleNode("/eLinkResult/LinkSet/DbFrom").getText();
+		String idStr = document.selectSingleNode("/eLinkResult/LinkSet/IdList/Id").getText();
+		Long id = Long.parseLong(idStr);
+		List<Node> linkSetDbs = document.selectNodes("/eLinkResult/LinkSet/LinkSetDb");
+		ArrayList<Relation> list = new ArrayList();
+		for (Node linkSetDb : linkSetDbs) {
+			String toDb = linkSetDb.selectSingleNode("DbTo").getText();
+			String linkName = linkSetDb.selectSingleNode("LinkName").getText();
+			List<Node> ids = linkSetDb.selectNodes("Link/Id");
+			list.ensureCapacity(list.size() + ids.size());
+			for (Node idNode : ids) {
+				long relatedId = Long.parseLong(idNode.getText());
+				if (id == relatedId)
+					continue;
+				Relation relation = new Relation();
+				relation.setRelationName(linkName);
+				relation.setFromDb(fromDb);
+				relation.setFromId(id);
+				relation.setToDb(toDb);
+				relation.setToId(relatedId);
+				list.add(relation);
+			}
+		}
+		return list;
 	}
 
 }

@@ -1,14 +1,7 @@
-package edu.scripps.fl.pubchem;
+package edu.scripps.fl.pubchem.web.pug;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.zip.GZIPInputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import edu.scripps.fl.pubchem.web.entrez.EUtilsSoapFactory;
+import edu.scripps.fl.pubchem.web.entrez.EntrezHistoryKey;
 import gov.nih.nlm.ncbi.pubchem.PUGStub;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.AnyKeyType;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.ArrayOfInt;
@@ -27,6 +20,15 @@ import gov.nih.nlm.ncbi.pubchem.PUGStub.InputEntrez;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.InputList;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.PCIDType;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.StatusType;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.zip.GZIPInputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PUGSoapFactory {
 
@@ -115,7 +117,7 @@ public class PUGSoapFactory {
 	}
 
 	public InputStream getAssayResults(int aid, String database, String searchTerm) throws Exception {
-		EntrezHistoryKey key = EUtilsFactory.getInstance().eSearch(database, searchTerm);
+		EntrezHistoryKey key = EUtilsSoapFactory.getInstance().eSearch(database, searchTerm);
 		String listKey = getListKey(key);
 		return getAssayResults(aid, listKey);
 	}
@@ -130,7 +132,7 @@ public class PUGSoapFactory {
 	}
 
 	public String getListKey(String database, String searchTerm) throws Exception {
-		EntrezHistoryKey entrezKey = EUtilsFactory.getInstance().eSearch(database, searchTerm);
+		EntrezHistoryKey entrezKey = EUtilsSoapFactory.getInstance().eSearch(database, searchTerm);
 		String key = getListKey(entrezKey);
 		return key;
 	}

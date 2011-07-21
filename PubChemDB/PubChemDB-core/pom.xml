@@ -10,11 +10,16 @@
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-core</artifactId>
-	<version>20110228</version>
+	<version>20110721</version>
 	<name>PubChemDB-core</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
+		<dependency>
+			<groupId>edu.scripps</groupId>
+			<artifactId>PubChemDB-web</artifactId>
+			<version>20110721</version>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -54,16 +59,6 @@
 			</groupId>
 			<artifactId>jpa-api</artifactId>
 			<version>2.0-cr-1</version>
-		</dependency>
-		<dependency> <!-- local dependency in src/repository -->
-			<groupId>gov.nih.nlm.ncbi</groupId>
-			<artifactId>ncbi-eutils-axis2</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency> <!-- local dependency in src/repository -->
-			<groupId>gov.nih.nlm.ncbi</groupId>
-			<artifactId>ncbi-pugsoap-axis2</artifactId>
-			<version>20090424</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
