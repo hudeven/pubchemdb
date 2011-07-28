@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 The Scripps Research Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package edu.scripps.fl.pubchem.web.session;
 
 import java.io.BufferedReader;
@@ -10,8 +25,10 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -33,8 +50,10 @@ import org.slf4j.LoggerFactory;
 import com.csvreader.CsvReader;
 
 import edu.scripps.fl.dom4j.util.AppendingVisitorSupport;
-import edu.scripps.fl.pubchem.web.PCBioActivity;
+import edu.scripps.fl.pubchem.web.PCBioActivityAssaySummary;
+import edu.scripps.fl.pubchem.web.PCBioActivityCompoundSummary;
 import edu.scripps.fl.pubchem.web.PCOutcomeCounts;
+import edu.scripps.fl.util.CollectionUtils;
 
 public class PCWebSession extends WebSessionBase {
 
@@ -45,17 +64,17 @@ public class PCWebSession extends WebSessionBase {
 		private Pattern errorPattern = Pattern.compile("<pre>Error: Caught CException: (.+)</pre>");
 		private final Logger log = LoggerFactory.getLogger(PCDepositionSystemSession.class);
 		private String page;
-		private Pattern reqIdPattern = Pattern.compile("([^\"]+reqid=\\d+)");
+		private Pattern reqIdPattern = Pattern.compile("\\W(reqid=\\d+)");
+//		private Pattern reqIdPattern = Pattern.compile("([^\"\']+reqid=\\d+)");
 
 		public WaitOnRequestId(String page) throws Exception {
 			this.page = page;
 			while (true) {
 				Matcher matcher = reqIdPattern.matcher(this.page);
 				if (matcher.find()) {
-					String url = matcher.group(1);
+					String reqid = matcher.group(1);
 					Thread.sleep(2000);
-					if (!url.startsWith("http://"))
-						url = "http://" + SITE + "/assay/" + url;
+					String url = "http://" + SITE + "/assay/assay.cgi?" + reqid;
 					log.info(String.format("found requestId in page. Next uri: %s", url));
 					this.page = getPage(url);
 				} else
@@ -266,24 +285,66 @@ public class PCWebSession extends WebSessionBase {
 		}
 		return oc;
 	}
+	
+	protected InputStream getBioActivityCompoundSummaryAsStream(List<Long> cids) throws Exception {
+		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "cid", StringUtils.join(cids, ","), "q", "cmp", "exptype", "csv");
+		URI uri = URIUtils.createURI("http", SITE, 80, "/assay/assaytool.cgi", URLEncodedUtils.format(params, "UTF-8"), null);
+		Document doc = new WaitOnRequestId(uri).asDocument();
+		return getFtpLinkAsStream(doc);
+	}
+	
+	public Map<Long, PCBioActivityCompoundSummary> getBioActivityCompoundSummaryAsMap(List<Long> cids) throws Exception {
+		List<PCBioActivityCompoundSummary> list = getBioActivityCompoundSummary(cids);
+		return CollectionUtils.toMap("CID", list);
+	}
+	
+	public List<PCBioActivityCompoundSummary> getBioActivityCompoundSummary(List<Long> cids) throws Exception {
+		List<PCBioActivityCompoundSummary> list = new ArrayList<PCBioActivityCompoundSummary>(cids.size());
+		CsvReader reader = new CsvReader(new InputStreamReader(getBioActivityCompoundSummaryAsStream(cids)), ',');
+		reader.readHeaders();
+		while( reader.readRecord() ) {
+			String line[] = reader.getValues();
+			PCBioActivityCompoundSummary sum = new PCBioActivityCompoundSummary();
+			BeanUtils.setProperty(sum, "CID", line[0]);
+			BeanUtils.setProperty(sum, "IUPAC", line[1]);
+			BeanUtils.setProperty(sum, "synonyms", line[2]);
+			BeanUtils.setProperty(sum, "bioAssayProbes", line[3]);
+			BeanUtils.setProperty(sum, "bioAssayActives", line[4]);
+			BeanUtils.setProperty(sum, "bioAssayTested", line[5]);
+			BeanUtils.setProperty(sum, "activeContentrationBelow1uM", line[6]);
+			BeanUtils.setProperty(sum, "activeContentrationBelow1nM", line[7]);
+			BeanUtils.setProperty(sum, "activeProteins", line[8]);
+			BeanUtils.setProperty(sum, "testedProteins", line[9]);
+			BeanUtils.setProperty(sum, "activeContentrationLowerBound", line[10]);
+			BeanUtils.setProperty(sum, "activeContentrationUpperBound", line[11]);
+			list.add(sum);
+		}
+		return list;
+	}
 
-	protected InputStream getBioActivitiesAsStream(List<Long> cids) throws Exception {
+	protected InputStream getBioActivityAssaySummaryAsStream(List<Long> cids) throws Exception {
 		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "cid", StringUtils.join(cids, ","), "q", "cids", "exptype", "bioactivitycsv");
 		URI uri = URIUtils.createURI("http", SITE, 80, "/assay/assay.cgi", URLEncodedUtils.format(params, "UTF-8"), null);
 		Document doc = new WaitOnRequestId(uri).asDocument();
 		return getFtpLinkAsStream(doc);
 	}
+	
+	public Map<Long, PCBioActivityAssaySummary> getBioActivityAssaySummaryAsMap(List<Long> cids) throws Exception {
+		List<PCBioActivityAssaySummary> list = getBioActivityAssaySummary(cids);
+		return CollectionUtils.toMap("AID", list);
+	}
 
-	public List<PCBioActivity> getBioActivities(List<Long> cids) throws Exception {
-		List<PCBioActivity> list = new ArrayList<PCBioActivity>();
-		CsvReader reader = new CsvReader(new InputStreamReader(getBioActivitiesAsStream(cids)), ',');
+	public List<PCBioActivityAssaySummary> getBioActivityAssaySummary(List<Long> cids) throws Exception {
+		List<PCBioActivityAssaySummary> list = new ArrayList<PCBioActivityAssaySummary>(cids.size());
+		CsvReader reader = new CsvReader(new InputStreamReader(getBioActivityAssaySummaryAsStream(cids)), ',');
 		reader.readHeaders();
 		reader.readRecord();
 		String line[] = reader.getValues();
+		// csv parsing written this way b/c of pubchem pub (1 row csv, 1000's columns!)
 		for (int ii = 0; ii < line.length; ii += 10) {
 			if( line.length - ii < 10 )
 				break;
-			PCBioActivity act = new PCBioActivity();
+			PCBioActivityAssaySummary act = new PCBioActivityAssaySummary();
 			BeanUtils.setProperty(act, "AID", line[ii]);
 			BeanUtils.setProperty(act, "probeCount", line[ii + 1]);
 			BeanUtils.setProperty(act, "activeCount", line[ii + 2]);

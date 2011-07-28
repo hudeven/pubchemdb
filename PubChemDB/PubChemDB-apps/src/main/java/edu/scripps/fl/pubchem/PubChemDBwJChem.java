@@ -11,10 +11,9 @@ import chemaxon.jchem.db.StructureTableOptions;
 import chemaxon.jchem.db.TableTypeConstants;
 import chemaxon.jchem.db.UpdateHandler;
 import chemaxon.util.ConnectionHandler;
-import edu.scripps.fl.pubchem.PubChemDB;
-import edu.scripps.fl.pubchem.db.PCCompound;
 import edu.scripps.fl.jchem.JChemUtils;
 import edu.scripps.fl.jdbc.JDBCUtils;
+import edu.scripps.fl.pubchem.db.PCCompound;
 
 public class PubChemDBwJChem extends PubChemDB {
 	

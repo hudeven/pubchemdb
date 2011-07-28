@@ -1,7 +1,6 @@
 package edu.scripps.fl.pubchem.app.assayxml;
 
 import org.apache.commons.pipeline.StageException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import edu.scripps.fl.pipeline.CommitStage;

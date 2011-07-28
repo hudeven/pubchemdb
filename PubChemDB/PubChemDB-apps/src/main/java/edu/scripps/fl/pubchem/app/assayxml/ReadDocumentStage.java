@@ -31,8 +31,8 @@ import org.dom4j.io.DOMReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.EUtilsFactory;
 import edu.scripps.fl.pubchem.PubChemFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
 
 public class ReadDocumentStage extends BaseStage {
 

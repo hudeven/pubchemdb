@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>PubChemDB</artifactId>
 		<groupId>edu.scripps</groupId>
-		<version>20110228</version>
+		<version>20110721</version>
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-apps</artifactId>
-	<version>20110228</version>
+	<version>20110721</version>
 	<repositories>
 		<repository>
 			<id>local</id>
@@ -25,9 +25,24 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>PubChemDB-core</artifactId>
-			<version>20110228</version>
+			<version>20110721</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

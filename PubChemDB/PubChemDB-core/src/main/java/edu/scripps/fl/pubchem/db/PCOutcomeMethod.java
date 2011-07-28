@@ -3,8 +3,6 @@ package edu.scripps.fl.pubchem.db;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Transient;
-
 public class PCOutcomeMethod {
 
 	private static Map<String, Integer> outcomeIds = new HashMap();

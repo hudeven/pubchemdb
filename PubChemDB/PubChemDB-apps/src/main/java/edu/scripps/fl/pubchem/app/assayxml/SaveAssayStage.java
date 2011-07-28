@@ -22,8 +22,6 @@ import org.hibernate.SessionFactory;
 import edu.scripps.fl.pipeline.CommitStage;
 import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.db.PCAssay;
-import edu.scripps.fl.pubchem.db.PCAssayXRef;
-import edu.scripps.fl.pubchem.db.XRef;
 
 public class SaveAssayStage extends CommitStage {
 

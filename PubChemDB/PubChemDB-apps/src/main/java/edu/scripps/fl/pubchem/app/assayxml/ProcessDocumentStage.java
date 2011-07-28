@@ -25,9 +25,9 @@ import org.dom4j.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.EUtilsFactory;
 import edu.scripps.fl.pubchem.PubChemXMLParserFactory;
 import edu.scripps.fl.pubchem.db.PCAssay;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
 
 public class ProcessDocumentStage extends BaseStage {
 
