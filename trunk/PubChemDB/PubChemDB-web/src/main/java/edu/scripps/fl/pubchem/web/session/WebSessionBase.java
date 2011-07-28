@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 The Scripps Research Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package edu.scripps.fl.pubchem.web.session;
 
 import java.awt.Desktop;
@@ -47,14 +62,18 @@ public abstract class WebSessionBase extends HttpClientBase {
 		TagNode root = cleaner.clean(inputStream);
 		DOMReader reader = new DOMReader();
 		Document doc = reader.read(new DomSerializer(cleaner.getProperties(), true).createDOM(root));
-		if (DEBUGGING) {
-			File file = File.createTempFile(getClass().getName(), ".html");
-			XMLWriter writer = new XMLWriter(new FileOutputStream(file));
-			writer.write(doc);
-			writer.close();
-			Desktop.getDesktop().open(file);
-		}
+		if (DEBUGGING) 
+			debugDocumentToTempFile(doc, DEBUGGING);
 		return doc;
+	}
+	
+	protected void debugDocumentToTempFile(Document doc, boolean displayFile) throws IOException {
+		File file = File.createTempFile(getClass().getName(), ".html");
+		XMLWriter writer = new XMLWriter(new FileOutputStream(file));
+		writer.write(doc);
+		writer.close();
+		if( displayFile )
+			Desktop.getDesktop().open(file);
 	}
 	
 	protected void addFormParts(Node formNode, MultipartEntity entity, Set<String> ignore) throws UnsupportedEncodingException {
@@ -88,12 +107,16 @@ public abstract class WebSessionBase extends HttpClientBase {
 	protected String getPage(HttpRequestBase method) throws IOException {
 		HttpResponse response = getHttpClient().execute(method);
 		String page = IOUtils.toString(response.getEntity().getContent());
-		if (DEBUGGING) {
-			File file = File.createTempFile(getClass().getName(), ".html");
-			IOUtils.write(page, new FileOutputStream(file));
-			Desktop.getDesktop().open(file);
-		}
+		if (DEBUGGING) 
+			debugPageToTempFile(page, DEBUGGING);
 		return page;
+	}
+	
+	protected void debugPageToTempFile(String page, boolean displayFile) throws IOException {
+		File file = File.createTempFile(getClass().getName(), ".html");
+		IOUtils.write(page, new FileOutputStream(file));
+		if( displayFile )
+			Desktop.getDesktop().open(file);
 	}
 
 	protected String getPage(String uri) throws IOException {

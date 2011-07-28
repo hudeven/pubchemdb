@@ -26,7 +26,7 @@ import org.apache.commons.pipeline.stage.ExtendedBaseStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.EUtilsFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
 
 public class ESummaryStage extends ExtendedBaseStage {
 

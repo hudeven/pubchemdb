@@ -10,7 +10,6 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.PubChemXMLParserFactory;
 import edu.scripps.fl.pubchem.PubChemXMLWriterFactory;

@@ -5,7 +5,7 @@ import java.io.InputStream;
 import org.apache.commons.pipeline.StageException;
 import org.apache.commons.pipeline.stage.BaseStage;
 
-import edu.scripps.fl.pubchem.PUGSoapFactory;
+import edu.scripps.fl.pubchem.web.pug.PUGSoapFactory;
 
 public class PugCsvDownloadStage extends BaseStage {
 	

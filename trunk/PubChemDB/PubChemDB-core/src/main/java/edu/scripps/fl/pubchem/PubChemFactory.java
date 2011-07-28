@@ -58,7 +58,7 @@ import edu.scripps.fl.pubchem.db.PCAssayResult;
 import edu.scripps.fl.pubchem.db.PCAssayXRef;
 import edu.scripps.fl.pubchem.db.Relation;
 import edu.scripps.fl.pubchem.db.XRef;
-import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
 
 public class PubChemFactory {
 
@@ -98,7 +98,7 @@ public class PubChemFactory {
 	}
 
 	public TreeSet<Long> getAIDs(String filter) throws Exception {
-		return (TreeSet<Long>) EUtilsWebSession.getInstance().getIds(filter, "pcassay", new TreeSet<Long>(), 75000);
+		return (TreeSet<Long>) EUtilsFactory.getInstance().getIds(filter, "pcassay", new TreeSet<Long>(), 75000);
 	}
 
 	public TreeSet<Long> getAIDs() throws Exception {
@@ -172,7 +172,7 @@ public class PubChemFactory {
 	}
 
 	public void populateAssayFromSummary(PCAssay assay) throws Exception {
-		Document document = EUtilsWebSession.getInstance().getSummary(assay.getAID(), "pcassay");
+		Document document = EUtilsFactory.getInstance().getSummary(assay.getAID(), "pcassay");
 		populateAssayFromSummaryDocument(assay, document
 				.selectSingleNode("eSummaryResult/DocumentSummarySet/DocumentSummary"));
 	}
@@ -233,7 +233,7 @@ public class PubChemFactory {
 	private static Map<String, String> unprocessedProperties = new java.util.concurrent.ConcurrentHashMap<String, String>();
 
 	public List<Long> getSummaryAID(Integer aid) throws Exception {
-		return EUtilsWebSession.getInstance().getIds(aid + "[XRefAid] AND summary[activityoutcomemethod]", "pcassay");
+		return EUtilsFactory.getInstance().getIds(aid + "[XRefAid] AND summary[activityoutcomemethod]", "pcassay");
 	}
 
 	public void populateAssayFromSummaryDocument(PCAssay assay, Node docSumNode) throws Exception {
@@ -640,7 +640,7 @@ public class PubChemFactory {
 	// }
 
 	public Collection<Long> getNeighbors(Long id) throws Exception {
-		Document document = EUtilsWebSession.getInstance().getDocument(
+		Document document = EUtilsFactory.getInstance().getDocument(
 				"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", "pcassay", "id", "" + id,
 				"linkname", "pcassay_pcassay_neighbor_list");
 		List<Node> linkSetDbs = document.selectNodes("/eLinkResult/LinkSet/LinkSetDb");
@@ -661,7 +661,7 @@ public class PubChemFactory {
 		Collection<Long> neighborAids = (Set<Long>) getNeighbors(aid);
 
 		// find summary aids for assay
-		Document doc = EUtilsWebSession.getInstance().getSummary(neighborAids, "pcassay");
+		Document doc = EUtilsFactory.getInstance().getSummary(neighborAids, "pcassay");
 		Iterator<Element> iter = doc.getRootElement().elementIterator("DocSum");
 		Long summaryAid = null;
 		List<Long> summaryAids = new ArrayList<Long>();
@@ -680,7 +680,7 @@ public class PubChemFactory {
 	}
 	
 	public List<Relation> getRelations(Long id, String fromDb, String toDb) throws Exception {
-		Document document = EUtilsWebSession.getInstance().getDocument(
+		Document document = EUtilsFactory.getInstance().getDocument(
 				"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", fromDb, "db", toDb, "id", "" + id);
 		return getRelations(document);
 	}

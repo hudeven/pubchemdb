@@ -24,7 +24,7 @@ import org.apache.commons.pipeline.stage.BaseStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.PUGSoapFactory;
+import edu.scripps.fl.pubchem.web.pug.PUGSoapFactory;
 
 public class FetchSDFStage extends BaseStage {
 

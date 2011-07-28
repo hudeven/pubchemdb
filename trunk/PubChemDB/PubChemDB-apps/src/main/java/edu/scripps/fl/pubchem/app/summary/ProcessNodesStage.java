@@ -21,8 +21,8 @@ import org.dom4j.Node;
 import org.hibernate.SessionFactory;
 
 import edu.scripps.fl.pipeline.CommitStage;
-import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.PubChemDB;
+import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.db.PCAssay;
 
 public class ProcessNodesStage extends CommitStage {

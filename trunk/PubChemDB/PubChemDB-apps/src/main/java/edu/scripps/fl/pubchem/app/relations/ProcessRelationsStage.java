@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import edu.scripps.fl.pipeline.DocumentStage;
 import edu.scripps.fl.pipeline.SessionStage;
-import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.PubChemDB;
+import edu.scripps.fl.pubchem.PubChemFactory;
 
 public class ProcessRelationsStage extends SessionStage {
 
