@@ -4,7 +4,7 @@ import java.net.URL;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.app.PUGAssayResultDownloader;
 import edu.scripps.fl.pubchem.web.pug.PUGSoapFactory;
