@@ -44,7 +44,7 @@ import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 import edu.scripps.fl.pubchem.web.ELinkResult;
 import edu.scripps.fl.pubchem.web.session.HttpClientBase;
 

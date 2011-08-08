@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 import edu.scripps.fl.pubchem.web.ELinkResult;
 import edu.scripps.fl.pubchem.web.entrez.ELinkWebSession;
 
