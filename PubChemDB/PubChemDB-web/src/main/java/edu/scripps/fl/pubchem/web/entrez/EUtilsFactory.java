@@ -80,47 +80,50 @@ public class EUtilsFactory extends HttpClientBase {
 	}
 
 	public Callable<InputStream> getInputStream(final String url, final Object... params) throws IOException {
-		return new Callable<InputStream>() {
-			public InputStream call() throws Exception {
-				StringBuffer sb = new StringBuffer();
-				sb.append(url).append("?");
-				HttpPost post = new HttpPost(url);
-				MultipartEntity entity = addParts(new MultipartEntity(), "tool", EUtilsFactory.this.TOOL, "email",
-						EUtilsFactory.this.EMAIL);
-				entity = addParts(entity, params);
-				post.setEntity(entity);
-				HttpResponse response = getHttpClient().execute(post);
-				// log.debug("Fetching from: " + url + StringUtils.join(params,
-				// " "));
-				InputStream in = response.getEntity().getContent();
-				return in;
-			}
-		};
+		return new InputStreamCallable(url, Arrays.asList(params));
+	}
+	
+	class InputStreamCallable implements Callable<InputStream> {
+		private String url;
+		Collection<Object> params;
+		public InputStreamCallable(String url, Collection<Object> params) {
+			this.url = url;
+			this.params = params;
+		}
+		public InputStream call() throws IOException {
+			HttpPost post = new HttpPost(url);
+			if( params.size() % 2 != 0 )
+				params.add("");
+			params.add("tool");
+			params.add(EUtilsFactory.this.TOOL);
+			params.add("email");
+			params.add(EUtilsFactory.this.EMAIL);
+			MultipartEntity entity = addParts(new MultipartEntity(), params);
+			post.setEntity(entity);
+			HttpResponse response = getHttpClient().execute(post);
+			log.debug("Fetching from: " + generateUrl(url, params) );
+			InputStream in = response.getEntity().getContent();
+			return in;
+		}
+	}
+	
+	private String generateUrl(String url, Collection<Object> params) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(url).append("?");
+		Iterator<Object> iter = params.iterator();
+		int counter = 0;
+		while(iter.hasNext()) {
+			String name = iter.next().toString();
+			String value = iter.hasNext() ? iter.next().toString() : "";
+			sb.append(name).append("=").append(value);
+			if(iter.hasNext())
+				sb.append("&");
+		}
+		return sb.toString();
 	}
 	
 	public Callable<InputStream> getInputStream(final String url, final Collection<Object> params) throws IOException {
-		return new Callable<InputStream>() {
-			public InputStream call() throws Exception {
-				StringBuffer sb = new StringBuffer();
-				sb.append(url).append("?");
-				HttpPost post = new HttpPost(url);
-				MultipartEntity entity = addParts(new MultipartEntity(), "tool", EUtilsFactory.this.TOOL, "email",
-						EUtilsFactory.this.EMAIL);
-				entity = addParts(entity, params);
-				post.setEntity(entity);
-				HttpResponse response = getHttpClient().execute(post);
-				// log.debug("Fetching from: " + url + StringUtils.join(params,
-				// " "));
-				InputStream in = response.getEntity().getContent();
-				return in;
-			}
-		};
-	}
-	
-	private MultipartEntity addParts(MultipartEntity entity, Object... pairs) throws UnsupportedEncodingException {
-		for (int ii = 0; ii < pairs.length; ii += 2)
-			entity.addPart(pairs[ii].toString(), new StringBody(pairs[ii + 1].toString()));
-		return entity;
+		return new InputStreamCallable(url, params);
 	}
 	
 	private MultipartEntity addParts(MultipartEntity entity, Collection<Object> pairs) throws UnsupportedEncodingException {
