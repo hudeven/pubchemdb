@@ -80,7 +80,8 @@ public class EUtilsFactory extends HttpClientBase {
 	}
 
 	public Callable<InputStream> getInputStream(final String url, final Object... params) throws IOException {
-		return new InputStreamCallable(url, Arrays.asList(params));
+		List list = new ArrayList(Arrays.asList(params));
+		return new InputStreamCallable(url, list);
 	}
 	
 	class InputStreamCallable implements Callable<InputStream> {
@@ -145,7 +146,8 @@ public class EUtilsFactory extends HttpClientBase {
 	}
 
 	public Document getDocument(final String url, final Object... params) throws Exception {
-		return getDocument(getInputStream(url, params).call());
+		List list = new ArrayList(Arrays.asList(params));
+		return getDocument(getInputStream(url, list).call());
 	}
 	
 	public Document getDocument(final String url, final Collection<Object> params) throws Exception {
