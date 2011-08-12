@@ -89,7 +89,7 @@ public class ELinkWebSession extends WebSessionBase {
 		return CollectionUtils.toMap("id", getELinkResults());
 	}
 
-	public List<ELinkResult> getELinkResults() throws Exception {
+	public List<ELinkResult> getELinkResults() {
 		return results;
 	}
 
@@ -171,61 +171,47 @@ public class ELinkWebSession extends WebSessionBase {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
 		DefaultHandler handler = new DefaultHandler() {
-			ELinkResult result;
-			boolean isLinkSet;
-			boolean isDbFrom;
-			boolean isDbTo;
-			boolean isLinkName;
-			boolean isId;
-			String dbTo;
-			String linkName;
-			List<Long> idList;
+			private ELinkResult result;
+			private List<Long> idList;
+			private StringBuffer buf;
+			private int depth;
+			private String linkName;
+			private String dbTo;
 
 			public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-				if (qName.equalsIgnoreCase("LinkSet")) {
-					isLinkSet = true;
+				depth++;
+				buf = new StringBuffer();
+				if (qName.equalsIgnoreCase("LinkSet"))
 					result = new ELinkResult();
-					relations.add(result);
-				} else if (qName.equalsIgnoreCase("DbFrom"))
-					isDbFrom = true;
-				else if (qName.equalsIgnoreCase("Id"))
-					isId = true;
-				else if (qName.equalsIgnoreCase("LinkSetDb")) {
-					isLinkSet = false;
-					dbTo = "";
-					linkName = "";
+				else if (qName.equalsIgnoreCase("LinkSetDb"))
 					idList = new ArrayList();
-				} else if (qName.equalsIgnoreCase("DbTo"))
-					isDbTo = true;
-				else if (qName.equalsIgnoreCase("LinkName"))
-					isLinkName = true;
 			}
 
 			public void endElement(String uri, String localName, String qName) throws SAXException {
-				if (qName.equalsIgnoreCase("LinkSetDb")) {
+				if( qName.equalsIgnoreCase("LinkSet"))
+					relations.add(result);
+				else if (qName.equalsIgnoreCase("LinkSetDb")) {
 					result.setIds(dbTo, linkName, idList);
 				}
+				else if (qName.equalsIgnoreCase("LinkName"))
+					linkName = buf.toString();
+				else if ( qName.equalsIgnoreCase("dbTo") )
+					dbTo = buf.toString();
+				else if ( qName.equalsIgnoreCase("DbFrom") ) {
+					result.setDbFrom(buf.toString());
+				}
+				else if ( qName.equalsIgnoreCase("Id") ) {
+					Long id = Long.parseLong(buf.toString());
+					if( depth == 4 )
+						result.setId(id);
+					else if ( depth == 5 )
+						idList.add(id);
+				}
+				depth--;
 			}
 
 			public void characters(char ch[], int start, int length) throws SAXException {
-				String text = new String(ch, start, length);
-				if (isDbFrom) {
-					result.setDbFrom(text);
-					isDbFrom = false;
-				} else if (isLinkSet && isId) {
-					result.setId(Long.parseLong(text));
-					isLinkSet = false;
-					isId = false;
-				} else if (isDbTo) {
-					dbTo = text;
-					isDbTo = false;
-				} else if (isId) {
-					idList.add(Long.parseLong(text));
-					isId = false;
-				} else if (isLinkName) {
-					linkName = text;
-					isLinkName = false;
-				}
+				buf.append(ch, start, length);
 			}
 		};
 		log.info("Memory in use before parsing: " + memUsage());

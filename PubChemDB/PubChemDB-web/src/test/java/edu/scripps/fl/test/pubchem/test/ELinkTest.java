@@ -25,15 +25,12 @@ public class ELinkTest {
 					list, "summary[activityoutcomemethod]");	
 			session.run();			
 //			should be 5 summaries found for this set of AIDs			
-			System.out.println("Number of summaries found " + session.getAllIds(linkNeighbor).size());			
+			System.out.println("Number of summaries found " + session.getAllIds(linkNeighbor).size());
+			printResults(session);
 		}	
 	
-	public void testInLoop() throws Exception {
-		ELinkWebSession session = new ELinkWebSession();
-		session.setDbFrom("pccompound");
-		session.setDb("pcassay");
-		session.setLinkName("pccompound_pcassay,pccompound_pcassay_active");
-		session.setIds( Arrays.asList(new Long[]{2551L,2046L}) );
+	
+	private void printResults(ELinkWebSession session) {
 		Collection<ELinkResult> relations = session.getELinkResults();
 		for(ELinkResult relation: relations) {
 			for(String db: relation.getDatabases()) {
@@ -43,6 +40,15 @@ public class ELinkTest {
 				}
 			}
 		}
+	}
+	
+	public void testInLoop() throws Exception {
+		ELinkWebSession session = new ELinkWebSession();
+		session.setDbFrom("pccompound");
+		session.setDb("pcassay");
+		session.setLinkName("pccompound_pcassay,pccompound_pcassay_active");
+		session.setIds( Arrays.asList(new Long[]{2551L,2046L}) );
+		printResults(session);
 	}
 	
 	public void testGivenCombo() throws Exception {

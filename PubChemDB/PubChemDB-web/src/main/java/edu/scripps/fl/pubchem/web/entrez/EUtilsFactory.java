@@ -227,4 +227,9 @@ public class EUtilsFactory extends HttpClientBase {
 		return getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi", "db", db, "id", idStr,
 				"retmode", "xml", "version", "2.0").call();
 	}
+	
+	public Document getSummariesAsDocument(Collection<Long> ids, String db) throws Exception {
+		return getDocument(getSummaries(ids, db));
+	}
+	
 }
