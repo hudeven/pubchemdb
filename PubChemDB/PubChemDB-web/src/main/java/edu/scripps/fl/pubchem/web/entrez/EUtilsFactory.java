@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +30,8 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -36,16 +39,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.dom4j.Node;
-import org.dom4j.VisitorSupport;
 import org.dom4j.io.DOMReader;
 import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.Arrays;
-import edu.scripps.fl.pubchem.web.ELinkResult;
 import edu.scripps.fl.pubchem.web.session.HttpClientBase;
 
 public class EUtilsFactory extends HttpClientBase {
@@ -178,43 +181,71 @@ public class EUtilsFactory extends HttpClientBase {
 			dbs.add(node.getText());
 		return dbs;
 	}
+	
+	public List<Long> getIds(String query, String db) throws Exception {
+		return (List<Long>) getIds(query, db, new ArrayList<Long>(), 1000000);
+	}
+	
+	class ESearchHandler extends DefaultHandler {
+		private StringBuffer buf;
+		String webEnv;
+		String queryKey;
+		int retMax;
+		int retStart;
+		int count;
+		private Collection<Long> ids;		
+		
+		public ESearchHandler(Collection<Long> ids) {
+			this.ids = ids;
+		}
 
-	public Collection<Long> getIds(String query, String db, final Collection<Long> ids, int chunkSize) throws Exception {
+		public void characters(char ch[], int start, int length) throws SAXException {
+			buf.append(ch, start, length);
+		}
+
+		public void endElement(String uri, String localName, String qName) throws SAXException {
+			if( qName.equalsIgnoreCase("Id") ) {
+				Long id = Long.parseLong(buf.toString());
+				ids.add(id);
+			}
+			else if( qName.equalsIgnoreCase("WebEnv") )
+				webEnv = buf.toString();
+			else if( qName.equalsIgnoreCase("QueryKey") )
+				queryKey = buf.toString();
+			else if( qName.equalsIgnoreCase("RetMax") )
+				retMax = Integer.parseInt( buf.toString() );
+			else if( qName.equalsIgnoreCase("RetStart") )
+				retStart = Integer.parseInt( buf.toString() );
+			else if( qName.equalsIgnoreCase("Count") ) {
+				count = Integer.parseInt(buf.toString());
+				if( ids instanceof ArrayList )
+					((ArrayList)ids).ensureCapacity(ids.size() + count);
+			}
+		}
+
+		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+			buf = new StringBuffer();
+		}
+	}
+	
+	public Collection<Long> getIds(String query, String db, Collection<Long> ids, int chunkSize) throws Exception {
 		int retStart = 0;
-		Document document = getDocument("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "db", db, "term",
-				query, "retstart", retStart, "retmax", "" + chunkSize, "usehistory", "y", "version", "2.0");
-		while (true) {
-			String webEnv = document.selectSingleNode("/eSearchResult/WebEnv").getText();
-			String queryKey = document.selectSingleNode("/eSearchResult/QueryKey").getText();
-			int count = Integer.parseInt(document.selectSingleNode("/eSearchResult/Count").getText());
-			int retMax = Integer.parseInt(document.selectSingleNode("/eSearchResult/RetMax").getText());
-			retStart = Integer.parseInt(document.selectSingleNode("/eSearchResult/RetStart").getText());
-
-			document.accept(new VisitorSupport() {
-				public void visit(Element element) {
-					if ("Id".equals(element.getName())) {
-						Long id = Long.parseLong(element.getText());
-						ids.add(id);
-					}
-				}
-			});
-			if ((retStart + retMax) < (count - 1)) {
-				retStart += retMax;
-				document = getDocument("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "db", db, "term",
-						query, "retstart", retStart, "retmax", "" + chunkSize, "usehistory", "y", "QueryKey", queryKey,
-						"WebEnv", webEnv, "version", "2.0");
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		SAXParser saxParser = factory.newSAXParser();
+		ESearchHandler handler = new ESearchHandler(ids);
+		InputStream is = getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "db", db, "term",
+				query, "retstart", retStart, "retmax", chunkSize, "usehistory", "y", "version", "2.0").call();
+		while(true) {
+			saxParser.parse(is, handler);
+			if ((handler.retStart + handler.retMax) < (handler.count - 1)) {
+				retStart += handler.retMax;
+				is = getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "db", db, "term",
+						query, "retstart", retStart, "retmax", "" + chunkSize, "usehistory", "y", "QueryKey", handler.queryKey,
+						"WebEnv", handler.webEnv, "version", "2.0").call();
 			} else
 				break;
 		}
 		return ids;
-	}
-
-	public List<Long> getIds(String query, String db) throws Exception {
-		return getIds(query, db, 50000);
-	}
-
-	public List<Long> getIds(String query, String db, int chunkSize) throws Exception {
-		return (List<Long>) getIds(query, db, new ArrayList<Long>(), chunkSize);
 	}
 
 	public Document getSummary(Object id, String db) throws Exception {

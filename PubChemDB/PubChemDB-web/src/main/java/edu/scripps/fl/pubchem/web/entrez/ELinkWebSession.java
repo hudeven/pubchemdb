@@ -60,6 +60,7 @@ public class ELinkWebSession extends WebSessionBase {
 	private List<ELinkResult> results;
 
 	public Set<Long> getAllIds(String linkName) throws Exception {
+		log.info("Fetching ids from elink session.");
 		Set<Long> ids = new HashSet<Long>();
 		log.info("Fetching ids from elink session.");
 		for (ELinkResult result : getELinkResults()) {
@@ -84,10 +85,12 @@ public class ELinkWebSession extends WebSessionBase {
 	}
 
 	public Map<Long, List<ELinkResult>> getELinkResultsAsMap() throws Exception {
+		log.info("getting map from elink session.");
 		Map map = new HashMap();
 		for (ELinkResult result : getELinkResults()) {
 			map.put(result.getId(), result);
 		}
+		log.info("obtained map from elink session.");
 		return map;
 	}
 
