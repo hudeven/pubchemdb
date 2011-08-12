@@ -15,7 +15,12 @@
  */
 package edu.scripps.fl.pubchem.web.entrez;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,6 +33,7 @@ import java.util.Set;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +104,14 @@ public class ELinkWebSession extends WebSessionBase {
 	protected Collection<ELinkResult> getELinkResultsSAX(final Collection<ELinkResult> relations) throws Exception {
 		log.info("Memory in use before inputstream: " + memUsage());
 		InputStream is = EUtilsFactory.getInstance().getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", getParams()).call();
+		if( DEBUGGING ) {
+			File file = File.createTempFile("elink", ".xml");
+			log.info("DEBUG MODE: Copying eLink stream to: " + file );
+			OutputStream os = new FileOutputStream(file);
+			IOUtils.copy(is, os);
+			IOUtils.closeQuietly(os);
+			is = new BufferedInputStream(new FileInputStream(file));
+		}
 		log.info("Memory in use after inputstream: " + memUsage());
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
@@ -146,7 +160,7 @@ public class ELinkWebSession extends WebSessionBase {
 		};
 		log.info("Memory in use before parsing: " + memUsage());
 		log.info("Parsing elink results using SAX.");
-		saxParser.parse(is, handler);
+		
 		log.info("Finished parsing elink results.");
 		log.info("Memory in use after parsing: " + memUsage());
 		return relations;

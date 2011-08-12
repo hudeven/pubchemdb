@@ -219,7 +219,7 @@ public class EUtilsFactory extends HttpClientBase {
 			else if( qName.equalsIgnoreCase("Count") ) {
 				count = Integer.parseInt(buf.toString());
 				if( ids instanceof ArrayList )
-					((ArrayList)ids).ensureCapacity(ids.size() + count);
+					((ArrayList<Long>)ids).ensureCapacity(ids.size() + count);
 			}
 		}
 
