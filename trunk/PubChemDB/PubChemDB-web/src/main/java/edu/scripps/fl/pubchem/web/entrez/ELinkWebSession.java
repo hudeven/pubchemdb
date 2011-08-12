@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -38,9 +37,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.scripps.fl.pubchem.web.ELinkResult;
 import edu.scripps.fl.pubchem.web.session.WebSessionBase;
-import edu.scripps.fl.util.CollectionUtils;
 
 public class ELinkWebSession extends WebSessionBase {
+
+	private static final Logger log = LoggerFactory.getLogger(ELinkWebSession.class);
 
 	public static ELinkWebSession newInstance(String dbFrom, String db, List<String> linkNames, List<Long> ids, String term) throws Exception {
 		ELinkWebSession session = new ELinkWebSession();
@@ -51,8 +51,6 @@ public class ELinkWebSession extends WebSessionBase {
 		session.setTerm(term);
 		return session;
 	}
-
-	private static final Logger log = LoggerFactory.getLogger(ELinkWebSession.class);
 	private Long id;
 	private String dbFrom;
 	private String db;
@@ -60,38 +58,6 @@ public class ELinkWebSession extends WebSessionBase {
 	private Collection<Long> ids;
 	private String term;
 	private List<ELinkResult> results;
-
-	public String getDbFrom() {
-		return dbFrom;
-	}
-
-	public String getDb() {
-		return db;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public Collection<Long> getIds() {
-		return ids;
-	}
-
-	public String getLinkName() {
-		return linkName;
-	}
-
-	public String getTerm() {
-		return term;
-	}
-
-	public Map<Long, List<ELinkResult>> getELinkResultsAsMap() throws Exception {
-		return CollectionUtils.toMap("id", getELinkResults());
-	}
-
-	public List<ELinkResult> getELinkResults() {
-		return results;
-	}
 
 	public Set<Long> getAllIds(String linkName) throws Exception {
 		Set<Long> ids = new HashSet<Long>();
@@ -104,63 +70,25 @@ public class ELinkWebSession extends WebSessionBase {
 		log.info("Retrieved ids from elink session.");
 		return ids;
 	}
-	
-	protected List<Object> getParams() {
-		List<Object> params = new ArrayList<Object>(8 + 2 * getIds().size());
-		params.addAll(Arrays.asList(new String[] { "dbfrom", getDbFrom(), "db", getDb() }));
-		if( null != getLinkName() && ! "".equals(getLinkName()) ) {
-			params.add("linkname");
-			params.add(getLinkName());
-		}
-		for (Number id : ids) {
-			params.add("id");
-			params.add(id.longValue());
-		}
-		if(null != getTerm() && ! "".equals(getTerm())){			
-			params.add("term");		
-			params.add(getTerm());		
-		}
-		params.add("version");
-		params.add("2.0");
-		return params;
+
+	public String getDb() {
+		return db;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<ELinkResult> run() throws Exception {
-		getELinkResultsSAX(results = new ArrayList(1000));
+	public String getDbFrom() {
+		return dbFrom;
+	}
+
+	public List<ELinkResult> getELinkResults() {
 		return results;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected Collection<ELinkResult> getELinkResultsDOM(Collection<ELinkResult> relations) throws Exception {
-		Document doc = EUtilsFactory.getInstance().getDocument("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", getParams());
-		log.info("Parsing elink results using DOM.");
-		List<Node> linkSets = doc.selectNodes("/eLinkResult/LinkSet");
-		if (relations instanceof ArrayList)
-			((ArrayList<ELinkResult>) relations).ensureCapacity(linkSets.size());
-
-		for (Node linkSetNode : linkSets) {
-			ELinkResult rel = new ELinkResult();
-			rel.setDbFrom(linkSetNode.valueOf("./DbFrom/text()"));
-			Long id = Long.parseLong(linkSetNode.valueOf("./IdList/Id/text()"));
-			rel.setId(id);
-
-			List<Node> linkSetDbs = linkSetNode.selectNodes("./LinkSetDb");
-			for (Node linkSetDbNode : linkSetDbs) {
-				String dbTo = linkSetDbNode.valueOf("./DbTo/text()");
-				String linkName = linkSetDbNode.valueOf("./LinkName/text()");
-				List<Node> idNodes = linkSetDbNode.selectNodes("./Link/Id");
-				List<Long> relatedIds = new ArrayList<Long>(idNodes.size());
-				for (Node idNode : idNodes) {
-					long relatedId = Long.parseLong(idNode.getText());
-					relatedIds.add(relatedId);
-				}
-				rel.setIds(dbTo, linkName, relatedIds);
-			}
-			relations.add(rel);
+	public Map<Long, List<ELinkResult>> getELinkResultsAsMap() throws Exception {
+		Map map = new HashMap();
+		for (ELinkResult result : getELinkResults()) {
+			map.put(result.getId(), result);
 		}
-		log.info("Finished parsing elink results.");
-		return relations;
+		return map;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -178,6 +106,32 @@ public class ELinkWebSession extends WebSessionBase {
 			private String linkName;
 			private String dbTo;
 
+			public void characters(char ch[], int start, int length) throws SAXException {
+				buf.append(ch, start, length);
+			}
+
+			public void endElement(String uri, String localName, String qName) throws SAXException {
+				if (qName.equalsIgnoreCase("LinkSet"))
+					relations.add(result);
+				else if (qName.equalsIgnoreCase("LinkSetDb")) {
+					if (idList.size() > 0)
+						result.setIds(dbTo, linkName, idList);
+				} else if (qName.equalsIgnoreCase("LinkName"))
+					linkName = buf.toString();
+				else if (qName.equalsIgnoreCase("dbTo"))
+					dbTo = buf.toString();
+				else if (qName.equalsIgnoreCase("DbFrom"))
+					result.setDbFrom(buf.toString());
+				else if (qName.equalsIgnoreCase("Id")) {
+					Long id = Long.parseLong(buf.toString());
+					if (depth == 4)
+						result.setId(id);
+					else if (depth == 5)
+						idList.add(id);
+				}
+				depth--;
+			}
+
 			public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 				depth++;
 				buf = new StringBuffer();
@@ -185,33 +139,6 @@ public class ELinkWebSession extends WebSessionBase {
 					result = new ELinkResult();
 				else if (qName.equalsIgnoreCase("LinkSetDb"))
 					idList = new ArrayList();
-			}
-
-			public void endElement(String uri, String localName, String qName) throws SAXException {
-				if( qName.equalsIgnoreCase("LinkSet"))
-					relations.add(result);
-				else if (qName.equalsIgnoreCase("LinkSetDb")) {
-					result.setIds(dbTo, linkName, idList);
-				}
-				else if (qName.equalsIgnoreCase("LinkName"))
-					linkName = buf.toString();
-				else if ( qName.equalsIgnoreCase("dbTo") )
-					dbTo = buf.toString();
-				else if ( qName.equalsIgnoreCase("DbFrom") ) {
-					result.setDbFrom(buf.toString());
-				}
-				else if ( qName.equalsIgnoreCase("Id") ) {
-					Long id = Long.parseLong(buf.toString());
-					if( depth == 4 )
-						result.setId(id);
-					else if ( depth == 5 )
-						idList.add(id);
-				}
-				depth--;
-			}
-
-			public void characters(char ch[], int start, int length) throws SAXException {
-				buf.append(ch, start, length);
 			}
 		};
 		log.info("Memory in use before parsing: " + memUsage());
@@ -221,18 +148,60 @@ public class ELinkWebSession extends WebSessionBase {
 		log.info("Memory in use after parsing: " + memUsage());
 		return relations;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public Collection<Long> getIds() {
+		return ids;
+	}
+
+	public String getLinkName() {
+		return linkName;
+	}
+
+	protected List<Object> getParams() {
+		List<Object> params = new ArrayList<Object>(8 + 2 * getIds().size());
+		params.addAll(Arrays.asList(new String[] { "dbfrom", getDbFrom(), "db", getDb() }));
+		if (null != getLinkName() && !"".equals(getLinkName())) {
+			params.add("linkname");
+			params.add(getLinkName());
+		}
+		for (Number id : ids) {
+			params.add("id");
+			params.add(id.longValue());
+		}
+		if (null != getTerm() && !"".equals(getTerm())) {
+			params.add("term");
+			params.add(getTerm());
+		}
+		params.add("version");
+		params.add("2.0");
+		return params;
+	}
+
+	public String getTerm() {
+		return term;
+	}
+
 	private long memUsage() {
 		long mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		return mem / 1024 / 1024;
 	}
 
-	public void setDbFrom(String dbFrom) {
-		this.dbFrom = dbFrom;
+	@SuppressWarnings("unchecked")
+	public List<ELinkResult> run() throws Exception {
+		getELinkResultsSAX(results = new ArrayList(1000));
+		return results;
 	}
 
 	public void setDb(String db) {
 		this.db = db;
+	}
+
+	public void setDbFrom(String dbFrom) {
+		this.dbFrom = dbFrom;
 	}
 
 	public void setId(Long id) {
