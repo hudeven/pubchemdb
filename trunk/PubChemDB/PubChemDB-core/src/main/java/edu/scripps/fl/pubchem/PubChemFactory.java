@@ -98,7 +98,7 @@ public class PubChemFactory {
 	}
 
 	public TreeSet<Long> getAIDs(String filter) throws Exception {
-		return (TreeSet<Long>) EUtilsFactory.getInstance().getIds(filter, "pcassay", new TreeSet<Long>(), 75000);
+		return (TreeSet<Long>) EUtilsFactory.getInstance().getIds(filter, "pcassay", new TreeSet<Long>());
 	}
 
 	public TreeSet<Long> getAIDs() throws Exception {
