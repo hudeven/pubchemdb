@@ -182,6 +182,10 @@ public class EUtilsFactory extends HttpClientBase {
 		return dbs;
 	}
 	
+	public Collection<Long> getIds(String query, String db, Collection<Long> ids) throws Exception {
+		return getIds(query, db, ids, 1000000);
+	}
+	
 	public List<Long> getIds(String query, String db) throws Exception {
 		return (List<Long>) getIds(query, db, new ArrayList<Long>(), 1000000);
 	}
