@@ -56,7 +56,7 @@ public class ReadDocumentStage extends BaseStage {
 	public void preprocess() throws StageException {
 		super.preprocess();
 		try {
-			onHoldAidSet = (Set<Long>) EUtilsFactory.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>(), 10000);
+			onHoldAidSet = (Set<Long>) EUtilsFactory.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>());
 		} catch (Exception ex) {
 			throw new StageException(this, ex);
 		}

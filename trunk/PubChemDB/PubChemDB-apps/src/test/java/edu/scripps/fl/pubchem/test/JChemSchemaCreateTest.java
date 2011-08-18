@@ -11,7 +11,7 @@ import edu.scripps.fl.pubchem.PubChemDBwJChem;
 public class JChemSchemaCreateTest {
 	
 	public static void main(String[] args) throws Exception {
-		URL url = JChemSchemaCreateTest.class.getClassLoader().getResource("edu/scripps/fl/pubchem/log4j.config.xml");
+		URL url = JChemSchemaCreateTest.class.getClassLoader().getResource("log4j.config.xml");
 		DOMConfigurator.configure(url);
 		url = new File(args[0]).toURI().toURL();
 		PubChemDBwJChem.setUp(url);
