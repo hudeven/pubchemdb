@@ -64,8 +64,8 @@ public class EUtilsSoapFactory {
 		EPostRequest request = new EPostRequest();
 		request.setDb(db);
 		request.setId(ids);
-		request.setEmail(EUtilsFactory.getEmail());
-		request.setTool(EUtilsFactory.getTool());
+		request.setEmail(EUtilsWebSession.getEmail());
+		request.setTool(EUtilsWebSession.getTool());
 		EPostResult result = getService().run_ePost(request);
 		if (null != result.getERROR())
 			throw new Exception(result.getERROR());
@@ -78,8 +78,8 @@ public class EUtilsSoapFactory {
 		eSearch.setTerm(searchTerm);
 		eSearch.setUsehistory("y");
 		eSearch.setRetMax("0");
-		eSearch.setEmail(EUtilsFactory.getEmail());
-		eSearch.setTool(EUtilsFactory.getTool());
+		eSearch.setEmail(EUtilsWebSession.getEmail());
+		eSearch.setTool(EUtilsWebSession.getTool());
 		ESearchResult result = getService().run_eSearch(eSearch);
 		Integer count = Integer.parseInt(result.getCount());
 		if (count < 0)

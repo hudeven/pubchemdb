@@ -78,7 +78,10 @@
 		<priority value="ERROR" />
 	</category>
 	<category name="org.apache.http">
-		<priority value="ERROR" />
+		<priority value="INFO" />
+	</category>
+	<category name="org.apache.http.wire">
+		<priority value="INFO" />
 	</category>
 
 	<category name="edu.scripps.fl.pubchem.PubChemFactory">

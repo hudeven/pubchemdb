@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>PubChemDB</artifactId>
 		<groupId>edu.scripps</groupId>
-		<version>20110228</version>
+		<version>20110819</version>
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-web</artifactId>
-	<version>20110721</version>
+	<version>20110819</version>
 	<dependencies>
 		<dependency> <!-- local dependency in src/repository -->
 			<groupId>gov.nih.nlm.ncbi</groupId>
@@ -23,12 +23,12 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.1</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>4.1</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
