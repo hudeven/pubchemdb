@@ -26,7 +26,7 @@ import org.apache.commons.pipeline.stage.ExtendedBaseStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
 
 public class ESummaryStage extends ExtendedBaseStage {
 
@@ -37,7 +37,7 @@ public class ESummaryStage extends ExtendedBaseStage {
 		try {
 			Thread.sleep(333);
 			List<Long> aids = (List<Long>) obj;
-			InputStream in = EUtilsFactory.getInstance().getSummaries(aids, "pcassay");
+			InputStream in = EUtilsWebSession.getInstance().getSummaries(aids, "pcassay");
 			File file = File.createTempFile("pubchem", "summary.xml");
 			log.info(String.format("Downloaded %s summaries to %s", aids.size(), file));
 			IOUtils.copy(in, new FileOutputStream(file));
