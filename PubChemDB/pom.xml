@@ -5,7 +5,7 @@
 
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB</artifactId>
-	<version>20110721</version>
+	<version>20110819</version>
 	<packaging>pom</packaging>
 
 	<name>PubChemDB</name>
