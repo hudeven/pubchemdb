@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>PubChemDB</artifactId>
 		<groupId>edu.scripps</groupId>
-		<version>20110228</version>
+		<version>20110819</version>
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-core</artifactId>
-	<version>20110721</version>
+	<version>20110819</version>
 	<name>PubChemDB-core</name>
 	<url>http://maven.apache.org</url>
 
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>PubChemDB-web</artifactId>
-			<version>20110721</version>
+			<version>20110819</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
