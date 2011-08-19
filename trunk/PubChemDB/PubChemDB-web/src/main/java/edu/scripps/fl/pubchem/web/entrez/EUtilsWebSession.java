@@ -115,7 +115,10 @@ public class EUtilsWebSession extends HttpClientBase {
 			if (DEBUGGING) {
 				File file = File.createTempFile("eutils", ".xml");
 				log.info("DEBUG MODE: Copying eUtils stream to: " + file);
-				response.getEntity().writeTo(new BufferedOutputStream(new FileOutputStream(file)));
+				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+				response.getEntity().writeTo(bos);
+				bos.flush();
+				bos.close();
 				return new BufferedInputStream(new FileInputStream(file));
 			}
 			else
