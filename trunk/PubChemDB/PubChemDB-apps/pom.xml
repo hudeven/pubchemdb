@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>PubChemDB</artifactId>
 		<groupId>edu.scripps</groupId>
-		<version>20110721</version>
+		<version>20110819</version>
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-apps</artifactId>
-	<version>20110721</version>
+	<version>20110819</version>
 	<repositories>
 		<repository>
 			<id>local</id>

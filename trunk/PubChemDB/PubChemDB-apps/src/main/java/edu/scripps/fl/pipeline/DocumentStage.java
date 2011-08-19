@@ -24,7 +24,7 @@ import org.dom4j.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
 
 public class DocumentStage extends ExtendedBaseStage {
 
@@ -34,7 +34,7 @@ public class DocumentStage extends ExtendedBaseStage {
 	public void innerProcess(Object obj) throws StageException {
 		File file = (File) obj;
 		try {
-			Document document = EUtilsFactory.getInstance().getDocument(new FileInputStream(file));
+			Document document = EUtilsWebSession.getInstance().getDocument(new FileInputStream(file));
 			file.deleteOnExit();
 			emit(document);
 		} catch (Exception ex) {

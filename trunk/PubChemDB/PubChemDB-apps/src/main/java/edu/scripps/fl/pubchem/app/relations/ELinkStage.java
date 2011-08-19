@@ -27,7 +27,7 @@ import org.apache.commons.pipeline.stage.BaseStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
 
 public class ELinkStage extends BaseStage {
 
@@ -38,7 +38,7 @@ public class ELinkStage extends BaseStage {
 	@Override
 	public void preprocess() throws StageException {
 		try {
-			Set<String> dbs = EUtilsFactory.getInstance().getDatabases();
+			Set<String> dbs = EUtilsWebSession.getInstance().getDatabases();
 			dbs.remove("pccompound");
 			dbs.remove("pcsubstance");
 			databases = StringUtils.join(dbs, ",");
@@ -52,7 +52,7 @@ public class ELinkStage extends BaseStage {
 		Integer id = (Integer) obj;
 		try {
 			Thread.sleep(333);
-			InputStream in = EUtilsFactory.getInstance().getInputStream("http://www.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", "pcassay",
+			InputStream in = EUtilsWebSession.getInstance().getInputStream("http://www.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", "dbfrom", "pcassay",
 					"db", databases, "id", "" + id).call();
 			File file = File.createTempFile("pubchem", "link.xml");
 			IOUtils.copy(in, new FileOutputStream(file));

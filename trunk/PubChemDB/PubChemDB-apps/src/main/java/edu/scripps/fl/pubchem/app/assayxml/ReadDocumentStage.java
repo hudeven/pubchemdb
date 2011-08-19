@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.scripps.fl.pubchem.PubChemFactory;
-import edu.scripps.fl.pubchem.web.entrez.EUtilsFactory;
+import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
 
 public class ReadDocumentStage extends BaseStage {
 
@@ -56,7 +56,7 @@ public class ReadDocumentStage extends BaseStage {
 	public void preprocess() throws StageException {
 		super.preprocess();
 		try {
-			onHoldAidSet = (Set<Long>) EUtilsFactory.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>());
+			onHoldAidSet = (Set<Long>) EUtilsWebSession.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>());
 		} catch (Exception ex) {
 			throw new StageException(this, ex);
 		}
