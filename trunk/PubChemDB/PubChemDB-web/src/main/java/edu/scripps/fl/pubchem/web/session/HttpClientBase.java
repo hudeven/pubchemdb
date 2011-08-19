@@ -17,11 +17,14 @@ package edu.scripps.fl.pubchem.web.session;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 public class HttpClientBase {
 
 	private HttpClient client = new DefaultHttpClient();
-
+	
 	public HttpClient getHttpClient() {
 		return client;
 	}

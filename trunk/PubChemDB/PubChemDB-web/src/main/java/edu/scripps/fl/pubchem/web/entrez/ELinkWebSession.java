@@ -15,14 +15,8 @@
  */
 package edu.scripps.fl.pubchem.web.entrez;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,12 +27,12 @@ import java.util.Set;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.scripps.fl.pubchem.web.ELinkResult;
@@ -57,11 +51,23 @@ public class ELinkWebSession extends WebSessionBase {
 		session.setTerm(term);
 		return session;
 	}
+	
+	public static ELinkWebSession newInstance(String dbFrom, List<String> linkNames, EntrezHistoryKey key, String term) throws Exception {
+		ELinkWebSession session = new ELinkWebSession();
+		session.setDbFrom(dbFrom);
+		session.setDb(key.getDatabase());
+		session.setLinkName(StringUtils.join(linkNames, ","));
+		session.setKey(key);
+		session.setTerm(term);
+		return session;
+	}
+
 	private Long id;
 	private String dbFrom;
 	private String db;
 	private String linkName;
 	private Collection<Long> ids;
+	private EntrezHistoryKey key = null;
 	private String term;
 	private List<ELinkResult> results;
 
@@ -103,15 +109,7 @@ public class ELinkWebSession extends WebSessionBase {
 	@SuppressWarnings("unchecked")
 	protected Collection<ELinkResult> getELinkResultsSAX(final Collection<ELinkResult> relations) throws Exception {
 		log.info("Memory in use before inputstream: " + memUsage());
-		InputStream is = EUtilsFactory.getInstance().getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", getParams()).call();
-		if( DEBUGGING ) {
-			File file = File.createTempFile("elink", ".xml");
-			log.info("DEBUG MODE: Copying eLink stream to: " + file );
-			OutputStream os = new FileOutputStream(file);
-			IOUtils.copy(is, os);
-			IOUtils.closeQuietly(os);
-			is = new BufferedInputStream(new FileInputStream(file));
-		}
+		InputStream is = EUtilsWebSession.getInstance().getInputStream("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi", getParams()).call();
 		log.info("Memory in use after inputstream: " + memUsage());
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
@@ -160,7 +158,12 @@ public class ELinkWebSession extends WebSessionBase {
 		};
 		log.info("Memory in use before parsing: " + memUsage());
 		log.info("Parsing elink results using SAX.");
-		
+		try {
+			saxParser.parse(is, handler);
+		}
+		catch(SAXParseException ex) {
+			throw new Exception("Error parsing ELink output: " + ex.getMessage());
+		}
 		log.info("Finished parsing elink results.");
 		log.info("Memory in use after parsing: " + memUsage());
 		return relations;
@@ -174,21 +177,43 @@ public class ELinkWebSession extends WebSessionBase {
 		return ids;
 	}
 
+	public EntrezHistoryKey getKey() {
+		return key;
+	}
+
 	public String getLinkName() {
 		return linkName;
 	}
 
-	protected List<Object> getParams() {
-		List<Object> params = new ArrayList<Object>(8 + 2 * getIds().size());
-		params.addAll(Arrays.asList(new String[] { "dbfrom", getDbFrom(), "db", getDb() }));
+	protected List<Object> getParams() throws Exception {
+		List<Object> params = new ArrayList();
+		params.add("db");
+		params.add(getDb());
+		
 		if (null != getLinkName() && !"".equals(getLinkName())) {
 			params.add("linkname");
 			params.add(getLinkName());
 		}
-		for (Number id : ids) {
-			params.add("id");
-			params.add(id.longValue());
+		
+		if ( null != getKey() ) {
+//			params.add("dbfrom");
+//			params.add(key.getDatabase());
+			params.add("WebEnv");
+			params.add(getKey().getWebEnv());
+			params.add("query_key");
+			params.add(getKey().getQueryKey());
 		}
+		else if (ids.size() > 0 ) {
+			params.add("dbfrom");
+			params.add(getDbFrom());
+			for (Number id : ids) {
+				params.add("id");
+				params.add(id.longValue());
+			}
+		}
+		else
+			throw new Exception("ELink: must provide either a List of Ids or an Entrez History Key");
+		
 		if (null != getTerm() && !"".equals(getTerm())) {
 			params.add("term");
 			params.add(getTerm());
@@ -227,6 +252,10 @@ public class ELinkWebSession extends WebSessionBase {
 
 	public void setIds(Collection<Long> ids) {
 		this.ids = ids;
+	}
+
+	public void setKey(EntrezHistoryKey key) {
+		this.key = key;
 	}
 
 	public void setLinkName(String linkName) {
