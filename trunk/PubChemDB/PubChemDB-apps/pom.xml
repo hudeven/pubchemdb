@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>PubChemDB-core</artifactId>
-			<version>20110721</version>
+			<version>20110819</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

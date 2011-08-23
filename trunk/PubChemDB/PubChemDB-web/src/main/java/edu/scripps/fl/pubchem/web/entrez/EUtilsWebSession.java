@@ -228,6 +228,7 @@ public class EUtilsWebSession extends HttpClientBase {
 		int retMax;
 		int retStart;
 		int count;
+		int depth = 0;
 		private Collection<Long> ids;
 
 		public ESearchHandler(Collection<Long> ids) {
@@ -250,14 +251,16 @@ public class EUtilsWebSession extends HttpClientBase {
 				retMax = Integer.parseInt(buf.toString());
 			else if (qName.equalsIgnoreCase("RetStart"))
 				retStart = Integer.parseInt(buf.toString());
-			else if (qName.equalsIgnoreCase("Count")) {
+			else if (depth == 2 && qName.equalsIgnoreCase("Count")) {
 				count = Integer.parseInt(buf.toString());
 				if (ids instanceof ArrayList)
 					((ArrayList<Long>) ids).ensureCapacity(ids.size() + count);
 			}
+			depth--;
 		}
 
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+			depth++;
 			buf = new StringBuffer();
 		}
 	}
