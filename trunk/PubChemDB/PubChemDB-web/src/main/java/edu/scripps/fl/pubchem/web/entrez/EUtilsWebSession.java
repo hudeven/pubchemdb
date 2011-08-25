@@ -64,8 +64,11 @@ public class EUtilsWebSession extends HttpClientBase {
 	private static final Logger log = LoggerFactory.getLogger(EUtilsWebSession.class);
 	private static final boolean DEBUGGING = true;
 	private static EUtilsWebSession instance;
-	public static String TOOL = "PubChemDB";
-	public static String EMAIL = "southern@scripps.edu";
+	
+	static {
+		setTool("PubChemDB");
+		setEmail("southern@scripps.edu");
+	}
 
 	public static EUtilsWebSession getInstance() {
 		if (instance == null) {
@@ -89,6 +92,14 @@ public class EUtilsWebSession extends HttpClientBase {
 	public static String getEmail() {
 		return System.getProperty("Entrez.Email");
 	}
+	
+	public static void setTool(String tool) {
+		System.setProperty("Entrez.Tool", tool);
+	}
+
+	public static void setEmail(String email) {
+		System.setProperty("Entrez.Email", email);
+	}
 
 	class InputStreamCallable implements Callable<InputStream> {
 		private String url;
@@ -104,9 +115,9 @@ public class EUtilsWebSession extends HttpClientBase {
 			if (params.size() % 2 != 0)
 				params.add("");
 			params.add("tool");
-			params.add(EUtilsWebSession.this.TOOL);
+			params.add(getTool());
 			params.add("email");
-			params.add(EUtilsWebSession.this.EMAIL);
+			params.add(getEmail());
 			MultipartEntity entity = addParts(new MultipartEntity(), params);
 //			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getNameValuePairs(params));
 			post.setEntity(entity);
