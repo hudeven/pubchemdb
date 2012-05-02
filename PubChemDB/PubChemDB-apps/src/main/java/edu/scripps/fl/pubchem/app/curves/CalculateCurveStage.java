@@ -34,7 +34,7 @@ public class CalculateCurveStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		try {
 			List<Double> concentrations = (List<Double>) ((Object[]) obj)[0];
 			PCAssayResult result = (PCAssayResult) ((Object[]) obj)[1];

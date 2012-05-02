@@ -51,7 +51,7 @@ public class PipelineUtils {
 	public void logErrors(Pipeline pipeline) {
 		for (StageDriver driver : pipeline.getStageDrivers()) {
 			for (ProcessingException pe : driver.getProcessingExceptions()) {
-				log.error(String.format("%s\t%s", pe.getData(), pe.getCause().getMessage()));
+				log.error(String.format("%s\t%s", pe.getData(), pe.getCause()));
 			}
 		}
 	}

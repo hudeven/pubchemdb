@@ -30,7 +30,7 @@ public class DeleteRelationsStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		Integer id = (Integer) obj;
 		try {
 			Query query = getSession().createQuery("delete from Relation where fromId = ? and fromDb = ?");

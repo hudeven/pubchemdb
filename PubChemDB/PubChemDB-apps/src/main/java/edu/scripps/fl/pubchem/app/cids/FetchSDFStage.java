@@ -39,6 +39,7 @@ public class FetchSDFStage extends BaseStage {
 			System.out.println("SDF File URL: " + url);
 			emit(url);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new StageException(this, ex);
 		}
 	}

@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.scripps.fl.pubchem.PubChemFactory;
 import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
+import edu.scripps.fl.util.ProgressWriter;
 
 public class ReadDocumentStage extends BaseStage {
 

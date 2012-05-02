@@ -56,7 +56,7 @@ public class ResultDownloader {
 
 	protected void process() throws Exception {
 		Query query = PubChemDB.getSession().createSQLQuery(
-				"select assay_aid from PCAssay where assay_version_changed = 'T' and assay_total_sid_count > 0 order by assay_aid");
+				"select assay_aid from PCAssay where assay_version_changed = 'T' and assay_total_sid_count > 0 and assay_aid > 1480 order by assay_aid");
 		Iterator<Integer> iter = new ScrollableResultsIterator(Integer.class, query.scroll(ScrollMode.FORWARD_ONLY));
 		process(iter);
 	}

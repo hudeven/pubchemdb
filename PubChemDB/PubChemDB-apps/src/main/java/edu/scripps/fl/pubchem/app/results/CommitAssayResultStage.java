@@ -41,8 +41,8 @@ public class CommitAssayResultStage extends CommitStage {
 
 		Session session = getSession();
 		session.save(result);
-		session.flush(); // problem with duplicate objects, don't know why :-?
-		session.clear();
+//		session.flush(); // problem with duplicate objects, don't know why :-?
+//		session.clear();
 
 		AIDTracker tracker = trackers.get(aid);
 		int saved = tracker.recordsSaved.incrementAndGet(); // no more records for this aid

@@ -31,7 +31,7 @@ public class DeleteResultsStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		Integer aid = (Integer) obj;
 		try {
 			Query query = getSession().createQuery("from PCAssay where AID = :aid");

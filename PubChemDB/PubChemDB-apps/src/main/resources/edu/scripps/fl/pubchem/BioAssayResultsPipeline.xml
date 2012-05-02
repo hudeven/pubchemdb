@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-	<driverFactory id="1" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1"/>
-	<driverFactory id="2" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="6"/>
-	<driverFactory id="3" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="4"/>
-	<driverFactory id="5" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="2">
+	<driverFactory id="1" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1">
 		<property propName="queueFactory"
 	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
-	            capacity="200000" fair="false"/>
+	            capacity="20" fair="false"/>
 	</driverFactory>
-	<driverFactory id="6" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="15">
+	<driverFactory id="2" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1">
 		<property propName="queueFactory"
 	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
-	            capacity="200000" fair="false"/>
+	            capacity="20" fair="false"/>
+	</driverFactory>
+	<driverFactory id="3" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="20" fair="false"/>
+	</driverFactory>
+	<driverFactory id="5" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="20" fair="false"/>
+	</driverFactory>
+	<driverFactory id="6" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="5">
+		<property propName="queueFactory"
+	        	className="org.apache.commons.pipeline.util.BlockingQueueFactory$ArrayBlockingQueueFactory"
+	            capacity="20" fair="false"/>
 	</driverFactory>
 	<driverFactory id="7" className="org.apache.commons.pipeline.driver.ThreadPoolStageDriverFactory" numThreads="1"/>
 	

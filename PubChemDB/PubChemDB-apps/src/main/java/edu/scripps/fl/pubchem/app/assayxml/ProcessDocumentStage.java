@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import edu.scripps.fl.pubchem.PubChemXMLParserFactory;
 import edu.scripps.fl.pubchem.db.PCAssay;
 import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
+import edu.scripps.fl.util.ProgressWriter;
 
 public class ProcessDocumentStage extends BaseStage {
 
@@ -36,12 +37,13 @@ public class ProcessDocumentStage extends BaseStage {
 	private Set<Long> onHoldAidSet;
 	private Set<Long> rnaiAidSet;
 	private Set<Long> smallMoleculeAidSet;
+	ProgressWriter pw = new ProgressWriter("ProcessDocument");
 
 	@Override
 	public void preprocess() throws StageException {
 		super.preprocess();
 		try {
-			onHoldAidSet = (Set<Long>) EUtilsWebSession.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>());
+//			onHoldAidSet = (Set<Long>) EUtilsWebSession.getInstance().getIds("\"hasonhold\"[filter]", "pcassay", new HashSet<Long>());
 			rnaiAidSet = (Set<Long>) EUtilsWebSession.getInstance().getIds("\"rnai\"[filter]", "pcassay", new HashSet<Long>());
 			smallMoleculeAidSet = (Set<Long>) EUtilsWebSession.getInstance().getIds("\"small_molecule\"[filter]", "pcassay", new HashSet<Long>());
 		} catch (Exception ex) {
@@ -51,6 +53,7 @@ public class ProcessDocumentStage extends BaseStage {
 
 	@Override
 	public void process(Object obj) throws StageException {
+		pw.increment();
 		try {
 			Document document = (Document) obj;
 			List<PCAssay> assays = PubChemXMLParserFactory.getInstance().populateAssaysFromXMLDocument(document, false);
@@ -64,11 +67,11 @@ public class ProcessDocumentStage extends BaseStage {
 			else
 				assay.setAssayType("");
 	
-			if (onHoldAidSet.contains(aid)) {
-				assay.setOnHold(true);
-			} else {
-				assay.setOnHold(false);
-			}
+//			if (onHoldAidSet.contains(aid)) {
+//				assay.setOnHold(true);
+//			} else {
+//				assay.setOnHold(false);
+//			}
 			
 			emit(assay);
 		}

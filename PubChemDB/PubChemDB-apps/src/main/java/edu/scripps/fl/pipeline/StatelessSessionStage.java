@@ -20,31 +20,31 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.pipeline.StageException;
 import org.apache.commons.pipeline.stage.BaseStage;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 
 /*
  * @author Mark Southern (southern at scripps dot edu)
  */
-public abstract class SessionStage extends BaseStage {
+public abstract class StatelessSessionStage extends BaseStage {
 
-	private Map<Thread, Session> sessions = new ConcurrentHashMap<Thread, Session>();
+	private Map<Thread, StatelessSession> sessions = new ConcurrentHashMap<Thread, StatelessSession>();
 	private Map<Thread, Transaction> transactions = new ConcurrentHashMap<Thread, Transaction>();
 
 	public abstract SessionFactory getSessionFactory();
 
-	public Session getSession() {
-		Session session = sessions.get(Thread.currentThread());
+	public StatelessSession getStatelessSession() {
+		StatelessSession session = sessions.get(Thread.currentThread());
 		if (session == null) {
-			session = getSessionFactory().openSession();
-			setSession(session);
+			session = getSessionFactory().openStatelessSession();
+			setStatelessSession(session);
 			setTransaction(session.beginTransaction());
 		}
 		return session;
 	}
 
-	public void setSession(Session session) {
+	public void setStatelessSession(StatelessSession session) {
 		sessions.put(Thread.currentThread(), session);
 	}
 
@@ -62,7 +62,7 @@ public abstract class SessionStage extends BaseStage {
 			for (Transaction tx : transactions.values())
 				if (!tx.wasCommitted())
 					tx.commit();
-			for (Session session : sessions.values()) {
+			for (StatelessSession session : sessions.values()) {
 				session.close();
 			}
 			sessions = null;
