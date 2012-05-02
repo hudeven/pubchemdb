@@ -22,8 +22,15 @@ import org.hibernate.SessionFactory;
 import edu.scripps.fl.pipeline.CommitStage;
 import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.db.PCAssay;
+import edu.scripps.fl.util.ProgressWriter;
 
 public class SaveAssayStage extends CommitStage {
+	
+	ProgressWriter pw = new ProgressWriter("SaveAssay");
+	
+	public SaveAssayStage() {
+		setCommitFrequency(1);
+	}
 
 	@Override
 	public SessionFactory getSessionFactory() {
@@ -32,10 +39,9 @@ public class SaveAssayStage extends CommitStage {
 
 	@Override
 	public void doSave(Object obj) throws StageException {
+		pw.increment();
 		Session session = getSession();
 		PCAssay assay = (PCAssay) obj;
 		PubChemDB.saveAssay(session, assay);
-		session.flush();
-		session.evict(assay);
 	}
 }

@@ -41,12 +41,12 @@ public class CsvReaderStage extends SessionStage {
 	}
 	
 	@Override
-	public void innerPreprocess() throws StageException {
+	public void preprocess() throws StageException {
 		type = (SourceColumnsInfo.Type) this.context.getEnv("CsvResultsSource");		
 	}
 	
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		try{
 			Object[] objs = (Object[]) obj;
 			Integer aid = (Integer) objs[0];
@@ -54,12 +54,13 @@ public class CsvReaderStage extends SessionStage {
 			processDataFromResource(aid, is);
 		}
 		catch(Exception ex) {
+			ex.printStackTrace();
 			throw new StageException(this, ex);
 		}		
 	}
 	
 	protected void processDataFromResource(Integer aid, InputStream is) throws Exception {
-		
+		System.out.println("Processing " + aid);
 		CsvReader reader = new CsvReader(new BufferedReader( new InputStreamReader(is)), ',');
 		reader.readHeaders();
 		String[] headers = reader.getHeaders();

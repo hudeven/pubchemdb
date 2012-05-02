@@ -62,8 +62,15 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.12</version>
+			<version>5.1.17</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc5</artifactId>
+			<version>11.2.0.3</version>
+		</dependency>
+
 		<dependency> <!-- local dependency in src/repository -->
 			<groupId>com.chemaxon</groupId>
 			<artifactId>jchem</artifactId>
@@ -83,6 +90,16 @@
 			<groupId>commons-digester</groupId>
 			<artifactId>commons-digester</artifactId>
 			<version>1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.csvreader</groupId>
+			<artifactId>csvreader</artifactId>
+			<version>2.0</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -32,6 +32,7 @@ import org.hibernate.ScrollableResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.scripps.fl.pipeline.PipelineUtils;
 import edu.scripps.fl.pubchem.PubChemDB;
 import edu.scripps.fl.pubchem.app.util.ScrollableResultsIterator;
@@ -66,12 +67,17 @@ public class CIDDownloader {
 
 		fetcher.setOutputFile(outputFile);
 		Iterator<?> iterator;
-		if (null == inputFile) {
-			log.info("Running query to find CIDs in PCAssayResult but not in PCCompound");
-			SQLQuery query = PubChemDB.getSession().createSQLQuery(
-							"select distinct r.cid from pcassay_result r left join pccompound c on r.cid = c.cid where r.cid is not null and c.cid is null order by r.cid");
-			ScrollableResults scroll = query.scroll(ScrollMode.FORWARD_ONLY);
-			iterator = new ScrollableResultsIterator<Integer>(Integer.class, scroll);
+		if (null == inputFile ) {
+			if ( args.length == 0 ) {
+				log.info("Running query to find CIDs in PCAssayResult but not in PCCompound");
+				SQLQuery query = PubChemDB.getSession().createSQLQuery(
+								"select distinct r.cid from pcassay_result r left join pccompound c on r.cid = c.cid where (r.cid is not null and r.cid > 0 ) and c.cid is null order by r.cid");
+				ScrollableResults scroll = query.scroll(ScrollMode.FORWARD_ONLY);
+				iterator = new ScrollableResultsIterator<Integer>(Integer.class, scroll);
+			}
+			else {
+				iterator = Arrays.asList(args).iterator();
+			}
 		} else if ("-".equals(inputFile)) {
 			log.info("Reading CIDs (one per line) from STDIN");
 			iterator = new LineIterator(new InputStreamReader(System.in));

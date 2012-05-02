@@ -36,7 +36,7 @@ public class ProcessRelationsStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		Document document = (Document) obj;
 		try {
 			int relations = PubChemFactory.getInstance().populateRelations(getSession(), document);

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 
 import edu.scripps.fl.pubchem.db.PCAssay;
@@ -68,8 +67,10 @@ public class SourceColumnsInfo {
 		return (long[]) ConvertUtils.convert(sids, long.class);
 	}
 	
-	protected String getCID(String[] row) {
-		return row[CID];
+	protected Long getCID(String[] row) {
+		if( "".equals(row[CID]) )
+			return null;
+		return Long.parseLong(row[CID]);
 	}
 	
 	protected String getComment(String[] row) {
@@ -81,8 +82,10 @@ public class SourceColumnsInfo {
 		return outcome;
 	}
 	
-	protected String getScore(String[] row) {
-		return row[SCORE];
+	protected Integer getScore(String[] row) {
+		if( "".equals( row[SCORE] ) )
+			return null;
+		return Integer.parseInt( row[SCORE] );
 	}
 	
 	protected String getURL(String[] row) {
@@ -125,14 +128,16 @@ public class SourceColumnsInfo {
 
 		result.setSID(SID);
 
-		BeanUtils.setProperty(result, "CID", getCID(values));
-		BeanUtils.setProperty(result, "Comments", getComment(values));
+		Long cid = getCID(values);
+		result.setCID(cid);
+
+		result.setComments( getComment(values) );
 		
-		Object outcome = this.type.equals(Type.PUG) ? getOutcome(values) : getPubChemOutcome(Integer.parseInt(getOutcome(values)));
-		BeanUtils.setProperty(result, "Outcome", outcome);
-		BeanUtils.setProperty(result, "Score", getScore(values));
-		BeanUtils.setProperty(result, "URL", getURL(values));
-		BeanUtils.setProperty(result, "Xref", getExtRegId(values));
+		String outcome = this.type.equals(Type.PUG) ? getOutcome(values) : getPubChemOutcome(Integer.parseInt(getOutcome(values)));
+		result.setOutcome(outcome);
+		result.setRankScore( getScore(values) );
+		result.setURL( getURL(values) );
+		result.setXref( getExtRegId(values) );
 
 		// if a dose response assay with a marked activeConcentration
 		if ("confirmatory".equals(assay.getActivityOutcomeMethod()) && activeColumn != null) {

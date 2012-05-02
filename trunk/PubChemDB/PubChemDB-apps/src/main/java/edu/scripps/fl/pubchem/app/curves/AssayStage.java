@@ -37,7 +37,7 @@ public class AssayStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		try {
 			Integer aid = (Integer) obj;
 			PCAssay assay = (PCAssay) getSession().load(PCAssay.class, aid);

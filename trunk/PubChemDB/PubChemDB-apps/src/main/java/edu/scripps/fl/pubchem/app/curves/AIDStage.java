@@ -70,7 +70,7 @@ public class AIDStage extends SessionStage {
 	}
 
 	@Override
-	public void innerPreprocess() throws StageException {
+	public void preprocess() throws StageException {
 		try {
 			this.referenceConcentrations = getConcentrations(getReferenceAID());
 		} catch (Exception ex) {
@@ -79,7 +79,7 @@ public class AIDStage extends SessionStage {
 	}
 
 	@Override
-	public void innerProcess(Object obj) throws StageException {
+	public void process(Object obj) throws StageException {
 		try {
 			Integer aid = (Integer) obj;
 			List<Double> concentrations = getConcentrations(aid);

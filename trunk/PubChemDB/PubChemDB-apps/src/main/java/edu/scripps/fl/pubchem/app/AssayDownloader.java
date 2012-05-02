@@ -61,6 +61,7 @@ public class AssayDownloader {
 		String data_url = clh.getCommandLine().getOptionValue("data_url");
 		if ( null == data_url )
 			data_url = "ftp://ftp.ncbi.nlm.nih.gov/pubchem/Bioassay/CSV/";
+//			data_url = "file:///C:/Home/temp/PubChemFTP/";
 
 		AssayDownloader main = new AssayDownloader();
 		main.dataUrl = new URL(data_url);
@@ -101,8 +102,19 @@ public class AssayDownloader {
 			if (stage instanceof ReadDocumentStage)
 				((ReadDocumentStage) stage).setDataUrl(dataUrl);
 		pipeline.run();
+		new PipelineUtils().logErrors(pipeline);
 		return pipeline;
 
+	}
+	
+	protected Set<Long> getAIDsfromLocalDB(){
+		SQLQuery query = PubChemDB.getSession().createSQLQuery("select assay_aid from pcassay");
+		ScrollableResults scroll = query.scroll(ScrollMode.FORWARD_ONLY);
+		Iterator<Long> iterator = new ScrollableResultsIterator<Long>(Long.class, scroll);
+		Set<Long> set = new HashSet();
+		while(iterator.hasNext())
+			set.add(iterator.next());
+		return set;
 	}
 
 	public void process() throws Exception {
@@ -117,6 +129,8 @@ public class AssayDownloader {
 		}
 		else if( this.mlpcn ) {
 			Set<Long> aids = PubChemFactory.getInstance().getAIDs("\"NIH Molecular Libraries Program\"[SourceCategory] OR \"hasonhold\"[Filter]");
+//			for(long id = 1; id < 1788; id++)
+//				aids.remove(id);
 			process(aids);
 		}
 		else if (this.days != null)
@@ -131,7 +145,7 @@ public class AssayDownloader {
 
 		List<Pipeline> pipelines = new ArrayList();
 		pipelines.add(assayXML(processAids));
-		pipelines.add(assaySummaries(processAids));
+		pipelines.add(assaySummaries(getAIDsfromLocalDB()));
 
 		for (Pipeline pipeline : pipelines)
 			new PipelineUtils().logErrors(pipeline);

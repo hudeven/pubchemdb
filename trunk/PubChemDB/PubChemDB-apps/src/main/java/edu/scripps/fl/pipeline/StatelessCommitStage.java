@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.pipeline.StageException;
-import org.hibernate.Session;
+import org.hibernate.StatelessSession;
 
 /*
  * @author Mark Southern (southern at scripps dot edu)
  */
-public abstract class CommitStage extends SessionStage {
+public abstract class StatelessCommitStage extends StatelessSessionStage {
 
 	private ThreadBasedCounter counter = new ThreadBasedCounter();
 
@@ -38,19 +38,16 @@ public abstract class CommitStage extends SessionStage {
 		this.commitFrequency = commitFrequency;
 	}
 
-	public void doSave(Object obj) throws Exception {
-		getSession().save(obj);
-	}
+	public abstract void doSave(Object obj) throws Exception;
 
 	@Override
 	public void process(Object obj) throws StageException {
 		try {
-			Session session = getSession();
+			StatelessSession session = getStatelessSession();
 			int count = counter.incrementAndGet();
 			doSave(obj);
 			if (count % getCommitFrequency() == 0) {
 				getTransaction().commit();
-				session.clear();
 				setTransaction(session.beginTransaction());
 			}
 		} catch (Exception ex) {
