@@ -4,21 +4,32 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class HttpClientTest {
@@ -50,7 +61,13 @@ public class HttpClientTest {
 		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list);
 		post.setEntity(entity);
 		HttpClient client = new DefaultHttpClient();
+
 		HttpResponse response = client.execute(post);
+		response.setHeader("Transfer-Encoding", "chunked");
+		Header encoding = response.getEntity().getContentEncoding();
+		System.out.println("Response encoding: " + ( encoding == null ? null : encoding.getName() + "/" + encoding.getValue() ) );
+		System.out.println("Response content length: " + response.getEntity().getContentLength());
+        System.out.println("Chunked?: " + response.getEntity().isChunked());		
 
 		// dump to local file so we can refer to it.
 		File file = File.createTempFile("eutils", ".xml");

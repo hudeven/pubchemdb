@@ -25,7 +25,8 @@ public class HttpClientBase {
 
 	public HttpClientBase() {
 		ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
-		client = new DefaultHttpClient(cm);
+        cm.setMaxTotal(100);
+        client = new DefaultHttpClient(cm);
 	}
 
 	public HttpClient getHttpClient() {
