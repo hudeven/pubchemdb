@@ -62,7 +62,7 @@ import edu.scripps.fl.pubchem.web.session.HttpClientBase;
 public class EUtilsWebSession extends HttpClientBase {
 
 	private static final Logger log = LoggerFactory.getLogger(EUtilsWebSession.class);
-	private static final boolean DEBUGGING = true;
+	private static final boolean DEBUGGING = false;
 	private static EUtilsWebSession instance;
 	
 	static {

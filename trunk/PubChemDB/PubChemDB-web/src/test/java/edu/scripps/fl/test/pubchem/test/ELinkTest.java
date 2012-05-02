@@ -106,6 +106,6 @@ public class ELinkTest {
 		DOMConfigurator.configure(ELinkTest.class.getClassLoader().getResource("log4j.config.xml"));
 //		BasicConfigurator.configure();
 		ELinkTest test = new ELinkTest();
-		test.testLarge();
+		test.testPost();
 	}
 }
