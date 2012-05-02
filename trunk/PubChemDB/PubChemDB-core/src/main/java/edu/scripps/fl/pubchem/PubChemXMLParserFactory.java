@@ -63,17 +63,17 @@ public class PubChemXMLParserFactory {
 		targetType.put("biosystem", "biosystems");
 		targetType.put("cid", "pccompound");
 		targetType.put("gene", "gene");
-		targetType.put("gi", ""); // Genbank general Id
+		targetType.put("gi", "gi"); // Genbank general Id
 		targetType.put("mesh", "mesh");
 		targetType.put("mim", "omim");
-		targetType.put("mmdb", ""); // 3d domains db not in einfo list of databases!
+		targetType.put("mmdb", "mmdb"); // 3d domains db not in einfo list of databases!
 		targetType.put("nucleotide", "nucleotide");
 		targetType.put("nucleotide-gi", "nucleotide");
 		targetType.put("pmid", "pubmed");
 		targetType.put("protein", "protein");
 		targetType.put("protein-gi", "protein");
-		targetType.put("regid", ""); // gene symbols, urls, aids.
-		targetType.put("rn", ""); // Substance Registry, CAS numbers etc.
+		targetType.put("regid", "regid"); // gene symbols, urls, aids.
+		targetType.put("rn", "rn"); // Substance Registry, CAS numbers etc.
 		targetType.put("rna", "nucleotide");
 		targetType.put("sid", "pcsubstance");
 		targetType.put("taxonomy", "taxonomy");

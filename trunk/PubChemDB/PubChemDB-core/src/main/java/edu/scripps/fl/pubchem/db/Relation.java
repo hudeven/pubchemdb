@@ -33,7 +33,7 @@ public class Relation implements Serializable {
 
 	private String fromDb;
 	private Long fromId;
-	private Long id;
+	private Long id = -1L;
 	private String relationName;
 	private String toDb;
 	private Long toId;

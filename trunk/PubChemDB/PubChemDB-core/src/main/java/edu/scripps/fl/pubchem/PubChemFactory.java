@@ -16,6 +16,8 @@
 package edu.scripps.fl.pubchem;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,12 +34,14 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.VFS;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.VFS;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -139,18 +143,30 @@ public class PubChemFactory {
 		return floor;
 	}
 
-	public InputStream getXmlDescr(URL parent, long aid) throws IOException {
+	public InputStream getXmlDescr(URL parent, long aid) throws Exception {
 		String archive = getAIDArchive(aid);
 		String sUrl = String.format("%s/%s/%s.zip", parent, "Description", archive);
+		
+//		File file = new File(new URL(sUrl).toURI());
+//		ZipFile zip = new ZipFile(file);
+//		String zEntry = String.format("%s/%s.descr.xml.gz",archive,aid);
+//		ZipEntry entry = zip.getEntry(zEntry);
+//		if( null == entry )
+//			throw new FileNotFoundException(file + "!" + zEntry);
+//		InputStream is = zip.getInputStream(entry);
+//		return new GZIPInputStream(is);
+		
 		String sZip = String.format("zip:%s!%s/%s.descr.xml.gz", sUrl, archive, aid);
 		// log.debug(sZip);
 		FileObject fo = VFS.getManager().resolveFile(sZip);
 		// log.debug("Resolved file: " + sZip);
+		if( ! fo.exists() )
+			throw new FileNotFoundException("Cannot find file: " + sZip);
 		InputStream is = fo.getContent().getInputStream();
 		return new GZIPInputStream(is);
 	}
 
-	public InputStream getXmlDescr(long aid) throws IOException {
+	public InputStream getXmlDescr(long aid) throws Exception {
 		String sUrl = String.format(pubchemBioAssayUrlFormat, ftpUser, ftpPass);
 		return getXmlDescr(new URL(sUrl), aid);
 	}

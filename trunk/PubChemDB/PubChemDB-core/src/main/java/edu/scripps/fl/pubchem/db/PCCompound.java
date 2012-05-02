@@ -38,7 +38,7 @@ public class PCCompound implements Serializable {
 	private String formula;
 	private Integer hBondAcceptors;
 	private Integer hBondDonors;
-	private Long id;
+	private Long id = -1L;
 	private String IUPACName;
 	private Double molWeight;
 	private Integer rotatableBonds;

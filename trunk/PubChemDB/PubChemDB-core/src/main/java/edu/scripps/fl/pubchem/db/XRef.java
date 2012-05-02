@@ -31,7 +31,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Table(name = "xref", uniqueConstraints = { @UniqueConstraint(columnNames = { "xref_identifier", "xref_database" }) })
 public class XRef implements Serializable {
 
-	private Long id;
+	private Long id = -1L;
 	private String database = "";
 	private String type = "";
 	private String name = "";

@@ -27,19 +27,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 @Entity
-@Table(name = "pcassay_xref", uniqueConstraints = { @UniqueConstraint(columnNames = { "assay_assay_id", "xref_xref_id", "panel_panel_id" }) })
+@Table(name = "pcassay_xref")//, uniqueConstraints = { @UniqueConstraint(columnNames = { "assay_assay_id", "xref_xref_id", "panel_panel_id" }) })
 public class PCAssayXRef implements Serializable {
 
-	private PCAssay assay;
+	private PCAssay assay = null;
 	private String comment = "";
-	private Long id;
-	private PCAssayPanel panel;
+	private Long id = -1L;
+	private PCAssayPanel panel = null;
 	private Boolean target = false;
-	private Long taxon;
-	private String taxonName;
-	private String taxonCommon;
-	private XRef xRef;
+	private Long taxon = -1L;
+	private String taxonName = "";
+	private String taxonCommon = "";
+	private XRef xRef = null;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -149,4 +151,13 @@ public class PCAssayXRef implements Serializable {
 	public void setXRef(XRef ref) {
 		xRef = ref;
 	}
+	
+	@Override
+	public String toString() {
+//		return ToStringBuilder.reflectionToString(this);
+		return String.format("assay = %s, panel = %s, xref=%s", getAssay().getId(), null, getXRef().getId());
+	}
+	
+	
+	
 }
