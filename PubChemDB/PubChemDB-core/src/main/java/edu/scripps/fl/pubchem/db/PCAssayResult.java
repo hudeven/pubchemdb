@@ -56,7 +56,7 @@ public class PCAssayResult implements Serializable {
 	private Long CID = null;
 	private String comments = "";
 	private PCCurve curve;
-	private Long id = null;
+	private Long id = -1L;
 	private String outcome = "";
 	private PCAssayColumn primaryColumn = null;
 	private Double primaryValue = null;

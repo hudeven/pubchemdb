@@ -28,9 +28,9 @@ public class PubChemDBSaveAssayTest {
 		assay.getCategorizedComments().put("hello", "world");
 		
 		Session session = PubChemDB.getSession();
-		PubChemDB.saveXRefs(session, assay);
-		PubChemDB.saveAssay(session, assay);
-		session.getTransaction().commit();
+//		PubChemDB.saveXRefs(session, assay);
+//		PubChemDB.saveAssay(session, assay);
+//		session.getTransaction().commit();
 	}
 	
 }

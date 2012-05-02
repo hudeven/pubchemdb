@@ -92,7 +92,7 @@ public class PubChemDB {
 	
 	protected static boolean isSchemaCreated() throws Exception {
 		Table table = PCAssay.class.getAnnotation(Table.class);
-		String name = table.name();
+		String name = table.name().toUpperCase();
 		Connection conn = getConnection();
 		boolean exists = JDBCUtils.tableExists(conn, name);
 		conn.close();
@@ -143,14 +143,46 @@ public class PubChemDB {
 			
 			if( storedAssay.getVersion() != assay.getVersion() && storedAssay.getRevision() != assay.getRevision() )
 				assay.setVersionChanged(true);
-			
-			delete(session, storedAssay.getPanels());
-			delete(session, storedAssay.getColumns());
+
 			delete(session, storedAssay.getAssayXRefs());
+			delete(session, storedAssay.getColumns());
+			delete(session, storedAssay.getPanels());
 			storedAssay.getCategorizedComments().clear();
 			session.save(storedAssay);
 			session.flush();
-
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			for(PCAssayPanel panel: assay.getPanels()){
 				panel.setAssay(storedAssay);
 				storedAssay.getPanels().add(panel);
@@ -188,7 +220,7 @@ public class PubChemDB {
 	public static void saveXRefs(Session session, PCAssay assay) {
 		for(PCAssayXRef assayXRef: assay.getAssayXRefs()) {
 			XRef xref = assayXRef.getXRef();
-			
+//			System.out.println(String.format("AID = %s, db = %s, xrefid = %s", assay.getAID(), xref.getDatabase(), xref.getXRefId()));
 			Criteria criteria = session.createCriteria(XRef.class);
 			criteria.add(Restrictions.eq("database", xref.getDatabase()));
 			criteria.add(Restrictions.eq("XRefId", xref.getXRefId()));

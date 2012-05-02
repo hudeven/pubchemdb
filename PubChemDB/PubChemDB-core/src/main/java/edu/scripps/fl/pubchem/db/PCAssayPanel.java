@@ -39,12 +39,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class PCAssayPanel implements Serializable {
 
 	private String activityOutcomeMethod = "";
-	private PCAssay assay;
+	private PCAssay assay = null;
 	private String comment = "";
 	private String description = "";
-	private Integer id;
+	private Integer id = -1;
 	private String name = "";
-	private Integer panelNumber;
+	private Integer panelNumber = -1;
 	private String protocol = "";
 
 	@Override

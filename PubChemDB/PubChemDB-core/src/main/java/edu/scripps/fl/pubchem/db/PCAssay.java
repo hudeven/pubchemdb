@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,12 +34,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
@@ -51,7 +52,7 @@ public class PCAssay implements Serializable {
 	private Integer activePanelSidCount; // eSummary
 	private Integer activeSidCount; // eSummary
 	private String activityOutcomeMethod = "";
-	private Integer AID = null;
+	private Integer AID = -1;
 	private String assayType = "";
 	private List<PCAssayXRef> assayXRefs = new ArrayList<PCAssayXRef>();
 	private List<PCAssayColumn> columns = new ArrayList<PCAssayColumn>();
@@ -63,7 +64,7 @@ public class PCAssay implements Serializable {
 	private String grantNumber = "";
 	private Boolean hasScore = Boolean.FALSE;
 	private Date holdUntilDate = null;
-	private Integer id = null;
+	private Integer id = -1;
 	private Integer inactiveCidCount;
 	private Integer inactiveSidCount;
 	private Integer inconclusiveCidCount;
@@ -112,7 +113,7 @@ public class PCAssay implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assay_assay_aid", referencedColumnName = "assay_aid")
 	public List<PCAssayResult> getResults() {
@@ -185,10 +186,10 @@ public class PCAssay implements Serializable {
 		return assayXRefs;
 	}
 
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "pcassay_comments", joinColumns = @JoinColumn(name = "assay_assay_id"))
-	@Column(name = "comment_name", nullable = false)
-	@org.hibernate.annotations.MapKey(columns = { @Column(name = "comment_value") })
+	@MapKeyColumn(name = "comment_name", length = 255)
+	@Column(name = "comment_value", length = 4000)
 	public Map<String, String> getCategorizedComments() {
 		return comments;
 	}
@@ -276,7 +277,7 @@ public class PCAssay implements Serializable {
 	}
 
 	@Index(name = "idx_pcassay_name")
-	@Column(name = "assay_name", length=2000)
+	@Column(name = "assay_name", length = 2000)
 	public String getName() {
 		return name;
 	}
@@ -340,7 +341,8 @@ public class PCAssay implements Serializable {
 
 	// @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	// @JoinColumn(name = "pcassay_xref_id")
-	// @org.hibernate.annotations.Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	// @org.hibernate.annotations.Cascade(value =
+	// org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	// @org.hibernate.annotations.IndexColumn(name = "pcassay_xref_position")
 
 	@Transient

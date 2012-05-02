@@ -36,12 +36,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class PCAssayColumn implements Serializable {
 
 	private boolean activeConcentration;
-	private PCAssay assay;
+	private PCAssay assay = null;
 	private Integer curvePlotLabel;
 	private String description = "";
-	private Integer id;
+	private Integer id = -1;
 	private String name = "";
-	private PCAssayPanel panel;
+	private PCAssayPanel panel = null;
 	private String panelReadoutType;
 	private Double testedConcentration;
 	private String testedConcentrationUnit;
@@ -135,12 +135,12 @@ public class PCAssayColumn implements Serializable {
 		return PCPanelReadout.getReadoutTypeId(getPanelReadoutType());
 	}
 
-	@Column(name = "column_tested_concentration")
+	@Column(name = "column_tested_conc")
 	public Double getTestedConcentration() {
 		return testedConcentration;
 	}
 
-	@Column(name = "column_tested_concentration_unit")
+	@Column(name = "column_tested_conc_unit")
 	public String getTestedConcentrationUnit() {
 		return testedConcentrationUnit;
 	}
@@ -194,7 +194,7 @@ public class PCAssayColumn implements Serializable {
 		return result;
 	}
 
-	@Column(name = "column_active_concentration")
+	@Column(name = "column_active_conc")
 	public boolean isActiveConcentration() {
 		return activeConcentration;
 	}
