@@ -54,7 +54,7 @@ import edu.scripps.fl.dom4j.util.FormControlVisitorSupport;
 public abstract class WebSessionBase extends HttpClientBase {
 
 	private static final Logger log = LoggerFactory.getLogger(WebSessionBase.class);
-	public boolean DEBUGGING = true;
+	public boolean DEBUGGING = false;
 	
 	
 	public Document getDocumentFromHtml(InputStream inputStream) throws IOException, ParserConfigurationException {
