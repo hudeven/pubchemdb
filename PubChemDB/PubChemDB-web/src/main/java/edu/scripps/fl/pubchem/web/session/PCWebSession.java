@@ -65,7 +65,9 @@ public class PCWebSession extends WebSessionBase {
 		private final Logger log = LoggerFactory.getLogger(PCDepositionSystemSession.class);
 		private String page;
 		private Pattern reqIdPattern = Pattern.compile("\\W(reqid=\\d+)");
-//		private Pattern reqIdPattern = Pattern.compile("([^\"\']+reqid=\\d+)");
+
+		// private Pattern reqIdPattern =
+		// Pattern.compile("([^\"\']+reqid=\\d+)");
 
 		public WaitOnRequestId(String page) throws Exception {
 			this.page = page;
@@ -102,7 +104,7 @@ public class PCWebSession extends WebSessionBase {
 			return page;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Returns CSV data file for the AID.
@@ -116,8 +118,7 @@ public class PCWebSession extends WebSessionBase {
 	}
 
 	protected InputStream getAssayFile(String format, String ext, int aid) throws Exception {
-		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "aid", aid, "q", "r", "exptype", format, "zip", "gzip", "resultsummary",
-				"detail", "releasehold", "t");
+		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "aid", aid, "q", "r", "exptype", format, "zip", "gzip", "resultsummary", "detail", "releasehold", "t");
 		URI uri = URIUtils.createURI("http", SITE, 80, "/assay/assay.cgi", URLEncodedUtils.format(params, "UTF-8"), null);
 		Document document = new WaitOnRequestId(uri).asDocument();
 		return getFtpLinkAsStream(document);
@@ -186,6 +187,21 @@ public class PCWebSession extends WebSessionBase {
 		return list;
 	}
 
+	public List getActiveSIDs(int aid) throws Exception {
+		InputStream is = getAssayCSV(aid);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line = br.readLine();
+		List list = new ArrayList();
+		do {
+			if (null == (line = br.readLine()))
+				break;
+			String items[] = line.split(",");
+			if (items[5].equals("Active"))
+				list.add(Long.valueOf(Long.parseLong(items[1])));
+		} while (true);
+		return list;
+	}
+
 	/**
 	 * 
 	 * Returns the full XML file for an AID.
@@ -199,8 +215,7 @@ public class PCWebSession extends WebSessionBase {
 	}
 
 	protected String getDataTablePage(int aid) throws Exception {
-		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "aid", aid, "q", "r", "pagefrom", "BioAssaySummary", "acount", "0",
-				"releasehold", "t", "activity" + aid, "");
+		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "aid", aid, "q", "r", "pagefrom", "BioAssaySummary", "acount", "0", "releasehold", "t", "activity" + aid, "");
 		URI uri = URIUtils.createURI("http", SITE, 80, "/assay/assay.cgi", URLEncodedUtils.format(params, "UTF-8"), null);
 		return new WaitOnRequestId(uri).asPage();
 	}
@@ -257,52 +272,64 @@ public class PCWebSession extends WebSessionBase {
 	 * @throws Exception
 	 */
 	public PCOutcomeCounts getSubstanceOutcomeCounts(int aid) throws Exception {
+		PCOutcomeCounts oc = null;
 		Document doc = getDocument("http://" + SITE + "/assay/assay.cgi?aid=" + aid);
-		Node node = doc.selectSingleNode("//b[. = 'Substances: ']").getParent();
-		AppendingVisitorSupport visitor = new AppendingVisitorSupport();
-		node.accept(visitor);
-		String text = visitor.getText();
-		Pattern sectionPattern = Pattern.compile("Substances:(.+)", Pattern.MULTILINE);
-		Matcher matcher = sectionPattern.matcher(text);
-		matcher.find();
-		text = matcher.group(1);
-		Pattern countPattern = Pattern.compile("([\\w]+):\\s+(\\d+)");
-		matcher = countPattern.matcher(text);
-		PCOutcomeCounts oc = new PCOutcomeCounts();
-		while (matcher.find()) {
-			String outcome = matcher.group(1);
-			int count = Integer.parseInt(matcher.group(2));
-			if ("All".equalsIgnoreCase(outcome))
-				oc.all = count;
-			else if ("Active".equalsIgnoreCase(outcome))
-				oc.active = count;
-			else if ("Inactive".equalsIgnoreCase(outcome))
-				oc.inactive = count;
-			else if ("Inconclusive".equalsIgnoreCase(outcome))
-				oc.inconclusive = count;
-			else if ("Probe".equalsIgnoreCase(outcome))
-				oc.probe = count;
+		Node node = doc.selectSingleNode("//b[. = 'Links:']");
+		//Node node = doc.selectSingleNode("//b[. = 'Substances: ']");
+		if(node != null){
+			node = node.getParent();
+			AppendingVisitorSupport visitor = new AppendingVisitorSupport();
+			node.accept(visitor);
+			String text = visitor.getText();
+			Pattern sectionPattern = Pattern.compile("Substances:(.+)", Pattern.DOTALL | Pattern.MULTILINE);
+			Matcher matcher = sectionPattern.matcher(text);
+			Boolean found = matcher.find();
+			if(found){
+				text = matcher.group(1);
+				Pattern countPattern;
+				if(text.contains("("))
+					countPattern = Pattern.compile("([\\w]+)\\((\\d+)\\)");
+				else
+					countPattern = Pattern.compile("([\\w]+):\\s+(\\d+)");
+
+				matcher = countPattern.matcher(text);
+				oc = new PCOutcomeCounts();
+				while (matcher.find()) {
+					String outcome = matcher.group(1);
+					int count = Integer.parseInt(matcher.group(2));
+					if ("All".equalsIgnoreCase(outcome))
+						oc.all = count;
+					else if ("Active".equalsIgnoreCase(outcome))
+						oc.active = count;
+					else if ("Inactive".equalsIgnoreCase(outcome))
+						oc.inactive = count;
+					else if ("Inconclusive".equalsIgnoreCase(outcome))
+						oc.inconclusive = count;
+					else if ("Probe".equalsIgnoreCase(outcome))
+						oc.probe = count;
+				}
+ 			}
 		}
 		return oc;
 	}
-	
+
 	protected InputStream getBioActivityCompoundSummaryAsStream(List<Long> cids) throws Exception {
 		List<NameValuePair> params = addParameters(new ArrayList<NameValuePair>(), "cid", StringUtils.join(cids, ","), "q", "cmp", "exptype", "csv");
 		URI uri = URIUtils.createURI("http", SITE, 80, "/assay/assaytool.cgi", URLEncodedUtils.format(params, "UTF-8"), null);
 		Document doc = new WaitOnRequestId(uri).asDocument();
 		return getFtpLinkAsStream(doc);
 	}
-	
+
 	public Map<Long, PCBioActivityCompoundSummary> getBioActivityCompoundSummaryAsMap(List<Long> cids) throws Exception {
 		List<PCBioActivityCompoundSummary> list = getBioActivityCompoundSummary(cids);
 		return CollectionUtils.toMap("CID", list);
 	}
-	
+
 	public List<PCBioActivityCompoundSummary> getBioActivityCompoundSummary(List<Long> cids) throws Exception {
 		List<PCBioActivityCompoundSummary> list = new ArrayList<PCBioActivityCompoundSummary>(cids.size());
 		CsvReader reader = new CsvReader(new InputStreamReader(getBioActivityCompoundSummaryAsStream(cids)), ',');
 		reader.readHeaders();
-		while( reader.readRecord() ) {
+		while (reader.readRecord()) {
 			String line[] = reader.getValues();
 			PCBioActivityCompoundSummary sum = new PCBioActivityCompoundSummary();
 			BeanUtils.setProperty(sum, "CID", line[0]);
@@ -328,7 +355,7 @@ public class PCWebSession extends WebSessionBase {
 		Document doc = new WaitOnRequestId(uri).asDocument();
 		return getFtpLinkAsStream(doc);
 	}
-	
+
 	public Map<Long, PCBioActivityAssaySummary> getBioActivityAssaySummaryAsMap(List<Long> cids) throws Exception {
 		List<PCBioActivityAssaySummary> list = getBioActivityAssaySummary(cids);
 		return CollectionUtils.toMap("AID", list);
@@ -340,9 +367,10 @@ public class PCWebSession extends WebSessionBase {
 		reader.readHeaders();
 		reader.readRecord();
 		String line[] = reader.getValues();
-		// csv parsing written this way b/c of pubchem pub (1 row csv, 1000's columns!)
+		// csv parsing written this way b/c of pubchem pub (1 row csv, 1000's
+		// columns!)
 		for (int ii = 0; ii < line.length; ii += 10) {
-			if( line.length - ii < 10 )
+			if (line.length - ii < 10)
 				break;
 			PCBioActivityAssaySummary act = new PCBioActivityAssaySummary();
 			BeanUtils.setProperty(act, "AID", line[ii]);
@@ -352,7 +380,7 @@ public class PCWebSession extends WebSessionBase {
 			BeanUtils.setProperty(act, "testedCount", line[ii + 4]);
 			BeanUtils.setProperty(act, "activesLessThan1uM", line[ii + 5]);
 			BeanUtils.setProperty(act, "activesLessThan1nM", line[ii + 6]);
-			if( ! "".equals(line[ii+7]) ) {
+			if (!"".equals(line[ii + 7])) {
 				String[] actRange = line[ii + 7].split(" - ");
 				BeanUtils.setProperty(act, "activityConcentrationMin", actRange[0]);
 				BeanUtils.setProperty(act, "activityConcentrationMax", actRange[1]);
