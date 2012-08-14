@@ -46,7 +46,7 @@ public class ELinkTest {
 		}
 	}
 
-	public void testInLoop() throws Exception {
+	public void inLoopTest() throws Exception {
 		ELinkWebSession session = new ELinkWebSession();
 		session.setDbFrom("pccompound");
 		session.setDb("pcassay");
@@ -55,7 +55,7 @@ public class ELinkTest {
 		printResults(session);
 	}
 
-	public void testGivenCombo() throws Exception {
+	public void givenComboTest() throws Exception {
 		ELinkWebSession session = new ELinkWebSession();
 		session.setDbFrom("pcassay");
 		session.setDb("protein");
@@ -66,7 +66,7 @@ public class ELinkTest {
 		}
 	}
 
-	public void testAsMap() throws Exception {
+	public void asMapTest() throws Exception {
 		ELinkWebSession session = new ELinkWebSession();
 		session.setDbFrom("pcassay");
 		session.setDb("protein");
@@ -75,7 +75,7 @@ public class ELinkTest {
 		System.out.println(session.getELinkResultsAsMap());
 	}
 
-	public void testPost() throws Exception {
+	public void postTest() throws Exception {
 		List<Long> list = new ArrayList(80000);
 		for (Iterator<String> iter = IOUtils.lineIterator(new FileReader("c:/home/temp/aids-20.txt")); iter.hasNext();)
 			list.add(Long.parseLong(iter.next()));
@@ -92,7 +92,7 @@ public class ELinkTest {
 		printResults(session);
 	}
 	
-	public void testLarge() throws Exception {
+	public void largeTest() throws Exception {
 		List<Long> list = new ArrayList(80000);
 		for (Iterator<String> iter = IOUtils.lineIterator(new FileReader("c:/home/temp/aids.txt")); iter.hasNext();)
 			list.add(Long.parseLong(iter.next()));
@@ -106,6 +106,6 @@ public class ELinkTest {
 		DOMConfigurator.configure(ELinkTest.class.getClassLoader().getResource("log4j.config.xml"));
 //		BasicConfigurator.configure();
 		ELinkTest test = new ELinkTest();
-		test.testPost();
+		test.postTest();
 	}
 }
