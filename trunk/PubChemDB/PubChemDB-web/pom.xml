@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>PubChemDB</artifactId>
 		<groupId>edu.scripps</groupId>
-		<version>20110819</version>
+		<version>20120628</version>
 	</parent>
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-web</artifactId>
-	<version>20110819</version>
+	<version>20120628</version>
 	<dependencies>
 		<dependency> <!-- local dependency in src/repository -->
 			<groupId>gov.nih.nlm.ncbi</groupId>
@@ -70,5 +70,31 @@
 			<artifactId>csvreader</artifactId>
 			<version>2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ws.commons.schema</groupId>
+			<artifactId>XmlSchema</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>backport-util-concurrent</groupId>
+			<artifactId>backport-util-concurrent</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.neethi</groupId>
+			<artifactId>neethi</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+
 	</dependencies>
 </project>
