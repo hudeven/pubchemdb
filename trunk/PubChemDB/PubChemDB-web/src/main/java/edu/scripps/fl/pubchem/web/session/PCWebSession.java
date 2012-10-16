@@ -274,14 +274,15 @@ public class PCWebSession extends WebSessionBase {
 	public PCOutcomeCounts getSubstanceOutcomeCounts(int aid) throws Exception {
 		PCOutcomeCounts oc = null;
 		Document doc = getDocument("http://" + SITE + "/assay/assay.cgi?aid=" + aid);
-		Node node = doc.selectSingleNode("//b[. = 'Links:']");
+		Node node = doc.selectSingleNode("//div[@id='uptsub']");
+//		Node node = doc.selectSingleNode("//b[. = 'Links:']");
 		//Node node = doc.selectSingleNode("//b[. = 'Substances: ']");
 		if(node != null){
 			node = node.getParent();
 			AppendingVisitorSupport visitor = new AppendingVisitorSupport();
 			node.accept(visitor);
 			String text = visitor.getText();
-			Pattern sectionPattern = Pattern.compile("Substances:(.+)", Pattern.DOTALL | Pattern.MULTILINE);
+			Pattern sectionPattern = Pattern.compile("Tested Substances(.+)", Pattern.DOTALL | Pattern.MULTILINE);
 			Matcher matcher = sectionPattern.matcher(text);
 			Boolean found = matcher.find();
 			if(found){
@@ -298,6 +299,8 @@ public class PCWebSession extends WebSessionBase {
 					String outcome = matcher.group(1);
 					int count = Integer.parseInt(matcher.group(2));
 					if ("All".equalsIgnoreCase(outcome))
+						oc.all = count;
+					else if(outcome.contains("All"))
 						oc.all = count;
 					else if ("Active".equalsIgnoreCase(outcome))
 						oc.active = count;
