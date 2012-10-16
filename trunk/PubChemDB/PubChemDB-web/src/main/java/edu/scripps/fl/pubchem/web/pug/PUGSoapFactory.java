@@ -92,7 +92,7 @@ public class PUGSoapFactory {
 		download.setAssayKey(assayKey);
 		download.setAssayFormat(AssayFormatType.eAssayFormat_CSV);
 		download.setECompress(compressType);
-		String downloadKey = getPUG().AssayDownload(download).getDownloadKey();
+		String downloadKey = getPUG().assayDownload(download).getDownloadKey();
 		AnyKeyType anyKey = new AnyKeyType();
 		anyKey.setAnyKey(downloadKey);
 		return anyKey;
@@ -111,14 +111,14 @@ public class PUGSoapFactory {
 		if (status == StatusType.eStatus_Success) {
 			GetDownloadUrl getURL = new GetDownloadUrl();
 			getURL.setDownloadKey(anyKey.getAnyKey());
-			URL url = new URL(getPUG().GetDownloadUrl(getURL).getUrl());
+			URL url = new URL(getPUG().getDownloadUrl(getURL).getUrl());
 			log.debug("Success! Download URL = " + url.toString());
 			return url.openStream();
 		} else {
 			GetStatusMessage message = new GetStatusMessage();
 			message.setGetStatusMessage(anyKey);
 			String errorMessage = "Error while downloading the assay: "
-					+ getPUG().GetStatusMessage(message).getMessage();
+					+ getPUG().getStatusMessage(message).getMessage();
 			log.error(errorMessage);
 			throw new Exception(errorMessage);
 		}
@@ -129,7 +129,7 @@ public class PUGSoapFactory {
 		assay.setAID(aid);
 		assay.setColumns(AssayColumnsType.eAssayColumns_Complete);
 		assay.setListKeySCIDs(listKey);
-		String assayKey = getPUG().InputAssay(assay).getAssayKey();
+		String assayKey = getPUG().inputAssay(assay).getAssayKey();
 		return assayKey;
 	}
 
@@ -170,7 +170,7 @@ public class PUGSoapFactory {
 		entrezKey.setKey(queryKey);
 		InputEntrez entrez = new InputEntrez();
 		entrez.setEntrezKey(entrezKey);
-		String listKey = getPUG().InputEntrez(entrez).getListKey();
+		String listKey = getPUG().inputEntrez(entrez).getListKey();
 		return listKey;
 	}
 
@@ -183,7 +183,7 @@ public class PUGSoapFactory {
 		getStatus.setGetOperationStatus(anyKey);
 		StatusType status;
 		int counter = 0;
-		while ((status = getPUG().GetOperationStatus(getStatus).getStatus()) == StatusType.eStatus_Running
+		while ((status = getPUG().getOperationStatus(getStatus).getStatus()) == StatusType.eStatus_Running
 				|| status == StatusType.eStatus_Queued) {
 			log.debug("Waiting for operation to finish...");
 			if (counter < 2)
@@ -202,7 +202,7 @@ public class PUGSoapFactory {
 		InputStructure inputStructure = new InputStructure();
 		inputStructure.setStructure(structure);
 		inputStructure.setFormat(type);
-		String structureKey = pug.InputStructure(inputStructure).getStrKey();
+		String structureKey = pug.inputStructure(inputStructure).getStrKey();
 		return structureKey;
 	}
 	
@@ -212,11 +212,11 @@ public class PUGSoapFactory {
 	    IdentitySearchOptions isOpt = new IdentitySearchOptions();
 	    isOpt.setEIdentity(IdentityType.eIdentity_SameStereoIsotope);
 	    iReq.setIdOptions(isOpt);
-	    String listKey = pug.IdentitySearch(iReq).getListKey();
+	    String listKey = pug.identitySearch(iReq).getListKey();
 	    waitFor(listKey);
 	    GetIDList getIdlistReq = new GetIDList();
 		getIdlistReq.setListKey(listKey);
-		return pug.GetIDList(getIdlistReq).getIDList().get_int();
+		return pug.getIDList(getIdlistReq).getIDList().get_int();
 	}
 	
 	public void waitFor(String listKey) throws RemoteException, InterruptedException {
@@ -227,7 +227,7 @@ public class PUGSoapFactory {
 		statusRequest.setGetOperationStatus(anyKey);
 		StatusType status;
 		long timeStart = System.currentTimeMillis();
-		while ((status = getPUG().GetOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
+		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
 				|| status == StatusType.eStatus_Queued) {
 			Thread.sleep(10000);
 			long timeNow = System.currentTimeMillis();
@@ -237,15 +237,15 @@ public class PUGSoapFactory {
 		if (status != StatusType.eStatus_Success) {
 			GetStatusMessage errorStatusRequest = new GetStatusMessage();
 			errorStatusRequest.setGetStatusMessage(anyKey);
-			log.error("Error: " + getPUG().GetStatusMessage(errorStatusRequest).getMessage());
-			throw new RuntimeException(getPUG().GetStatusMessage(errorStatusRequest).getMessage());
+			log.error("Error: " + getPUG().getStatusMessage(errorStatusRequest).getMessage());
+			throw new RuntimeException(getPUG().getStatusMessage(errorStatusRequest).getMessage());
 		}
 	}
 	
 	public EntrezKey getEntrezKey(String listKey) throws RemoteException {
 		GetEntrezKey g = new GetEntrezKey();
 		g.setListKey(listKey);
-		GetEntrezKeyResponse resp = pug.GetEntrezKey(g);
+		GetEntrezKeyResponse resp = pug.getEntrezKey(g);
         return resp.getEntrezKey();
 	}
 	
@@ -255,13 +255,13 @@ public class PUGSoapFactory {
 		InputList list = new InputList();
 		list.setIds(arr);
 		list.setIdType(type);
-		String listKey = getPUG().InputList(list).getListKey();
+		String listKey = getPUG().inputList(list).getListKey();
 
 		Download download = new Download();
 		download.setListKey(listKey);
 		download.setEFormat(FormatType.eFormat_SDF);
 		download.setECompress(CompressType.eCompress_GZip);
-		String downloadKey = getPUG().Download(download).getDownloadKey();
+		String downloadKey = getPUG().download(download).getDownloadKey();
 
 		GetOperationStatus statusRequest = new GetOperationStatus();
 		AnyKeyType anyKey = new AnyKeyType();
@@ -269,7 +269,7 @@ public class PUGSoapFactory {
 		statusRequest.setGetOperationStatus(anyKey);
 		StatusType status;
 		long timeStart = System.currentTimeMillis();
-		while ((status = getPUG().GetOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
+		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
 				|| status == StatusType.eStatus_Queued) {
 			Thread.sleep(10000);
 			long timeNow = System.currentTimeMillis();
@@ -280,13 +280,13 @@ public class PUGSoapFactory {
 		if (status == StatusType.eStatus_Success) {
 			GetDownloadUrl downloadUrl = new GetDownloadUrl();
 			downloadUrl.setDownloadKey(downloadKey);
-			URL url = new URL(getPUG().GetDownloadUrl(downloadUrl).getUrl());
+			URL url = new URL(getPUG().getDownloadUrl(downloadUrl).getUrl());
 			return url;
 		} else {
 			GetStatusMessage errorStatusRequest = new GetStatusMessage();
 			errorStatusRequest.setGetStatusMessage(anyKey);
-			log.error("Error: " + getPUG().GetStatusMessage(errorStatusRequest).getMessage());
-			throw new RuntimeException(getPUG().GetStatusMessage(errorStatusRequest).getMessage());
+			log.error("Error: " + getPUG().getStatusMessage(errorStatusRequest).getMessage());
+			throw new RuntimeException(getPUG().getStatusMessage(errorStatusRequest).getMessage());
 		}
 	}
 	
