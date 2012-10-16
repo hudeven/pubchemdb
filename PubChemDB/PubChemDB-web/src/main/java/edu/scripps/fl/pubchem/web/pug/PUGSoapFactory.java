@@ -28,11 +28,18 @@ import gov.nih.nlm.ncbi.pubchem.PUGStub.Download;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.EntrezKey;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.FormatType;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.GetDownloadUrl;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.GetEntrezKey;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.GetEntrezKeyResponse;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.GetIDList;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.GetOperationStatus;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.GetStatusMessage;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.IdentitySearch;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.IdentitySearchOptions;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.IdentityType;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.InputAssay;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.InputEntrez;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.InputList;
+import gov.nih.nlm.ncbi.pubchem.PUGStub.InputStructure;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.PCIDType;
 import gov.nih.nlm.ncbi.pubchem.PUGStub.StatusType;
 
@@ -189,6 +196,57 @@ public class PUGSoapFactory {
 
 	private PUGStub getPUG() {
 		return pug;
+	}
+	
+	private String inputStructure(String structure, FormatType type) throws RemoteException {
+		InputStructure inputStructure = new InputStructure();
+		inputStructure.setStructure(structure);
+		inputStructure.setFormat(type);
+		String structureKey = pug.InputStructure(inputStructure).getStrKey();
+		return structureKey;
+	}
+	
+	public int[] identitySearch(String smiles, int intervalMs, int tryLimit) throws RemoteException, InterruptedException {
+		IdentitySearch iReq = new IdentitySearch();
+		iReq.setStrKey(inputStructure(smiles, FormatType.eFormat_SMILES));
+	    IdentitySearchOptions isOpt = new IdentitySearchOptions();
+	    isOpt.setEIdentity(IdentityType.eIdentity_SameStereoIsotope);
+	    iReq.setIdOptions(isOpt);
+	    String listKey = pug.IdentitySearch(iReq).getListKey();
+	    waitFor(listKey);
+	    GetIDList getIdlistReq = new GetIDList();
+		getIdlistReq.setListKey(listKey);
+		return pug.GetIDList(getIdlistReq).getIDList().get_int();
+	}
+	
+	public void waitFor(String listKey) throws RemoteException, InterruptedException {
+		GetOperationStatus statusRequest = new GetOperationStatus();
+		AnyKeyType anyKey = new AnyKeyType();
+		anyKey.setAnyKey(listKey);
+		
+		statusRequest.setGetOperationStatus(anyKey);
+		StatusType status;
+		long timeStart = System.currentTimeMillis();
+		while ((status = getPUG().GetOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
+				|| status == StatusType.eStatus_Queued) {
+			Thread.sleep(10000);
+			long timeNow = System.currentTimeMillis();
+			log.debug(String.format("Waiting on pug operation. Total duration = %ss",
+					(timeNow - timeStart) / 1000));
+		}
+		if (status != StatusType.eStatus_Success) {
+			GetStatusMessage errorStatusRequest = new GetStatusMessage();
+			errorStatusRequest.setGetStatusMessage(anyKey);
+			log.error("Error: " + getPUG().GetStatusMessage(errorStatusRequest).getMessage());
+			throw new RuntimeException(getPUG().GetStatusMessage(errorStatusRequest).getMessage());
+		}
+	}
+	
+	public EntrezKey getEntrezKey(String listKey) throws RemoteException {
+		GetEntrezKey g = new GetEntrezKey();
+		g.setListKey(listKey);
+		GetEntrezKeyResponse resp = pug.GetEntrezKey(g);
+        return resp.getEntrezKey();
 	}
 	
 	public URL getSDFile(PCIDType type, int[] ids) throws IOException, InterruptedException {
