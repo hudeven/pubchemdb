@@ -49,6 +49,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,8 +118,7 @@ public class PUGSoapFactory {
 		} else {
 			GetStatusMessage message = new GetStatusMessage();
 			message.setGetStatusMessage(anyKey);
-			String errorMessage = "Error while downloading the assay: "
-					+ getPUG().getStatusMessage(message).getMessage();
+			String errorMessage = "Error while downloading the assay: " + getPUG().getStatusMessage(message).getMessage();
 			log.error(errorMessage);
 			throw new Exception(errorMessage);
 		}
@@ -183,8 +183,7 @@ public class PUGSoapFactory {
 		getStatus.setGetOperationStatus(anyKey);
 		StatusType status;
 		int counter = 0;
-		while ((status = getPUG().getOperationStatus(getStatus).getStatus()) == StatusType.eStatus_Running
-				|| status == StatusType.eStatus_Queued) {
+		while ((status = getPUG().getOperationStatus(getStatus).getStatus()) == StatusType.eStatus_Running || status == StatusType.eStatus_Queued) {
 			log.debug("Waiting for operation to finish...");
 			if (counter < 2)
 				Thread.sleep(initSleepTime);
@@ -197,7 +196,7 @@ public class PUGSoapFactory {
 	private PUGStub getPUG() {
 		return pug;
 	}
-	
+
 	private String inputStructure(String structure, FormatType type) throws RemoteException {
 		InputStructure inputStructure = new InputStructure();
 		inputStructure.setStructure(structure);
@@ -205,34 +204,44 @@ public class PUGSoapFactory {
 		String structureKey = pug.inputStructure(inputStructure).getStrKey();
 		return structureKey;
 	}
-	
-	public int[] identitySearch(String smiles, int intervalMs, int tryLimit) throws RemoteException, InterruptedException {
+
+	public int[] identitySearch(String molecule, FormatType formatType, int intervalMs, int tryLimit) throws RemoteException, InterruptedException {
 		IdentitySearch iReq = new IdentitySearch();
-		iReq.setStrKey(inputStructure(smiles, FormatType.eFormat_SMILES));
-	    IdentitySearchOptions isOpt = new IdentitySearchOptions();
-	    isOpt.setEIdentity(IdentityType.eIdentity_SameStereoIsotope);
-	    iReq.setIdOptions(isOpt);
-	    String listKey = pug.identitySearch(iReq).getListKey();
-	    waitFor(listKey);
-	    GetIDList getIdlistReq = new GetIDList();
+
+		iReq.setStrKey(inputStructure(molecule, formatType));
+		IdentitySearchOptions isOpt = new IdentitySearchOptions();
+		isOpt.setEIdentity(IdentityType.eIdentity_SameStereoIsotope);
+		iReq.setIdOptions(isOpt);
+		String listKey = pug.identitySearch(iReq).getListKey();
+		waitFor(listKey, intervalMs, tryLimit);
+		GetIDList getIdlistReq = new GetIDList();
 		getIdlistReq.setListKey(listKey);
-		return pug.getIDList(getIdlistReq).getIDList().get_int();
+		try {
+			return pug.getIDList(getIdlistReq).getIDList().get_int();
+		} catch (AxisFault ex) {
+			String msg = ex.getMessage();
+			if (msg.contains("Incomplete Entrez key - no hits"))
+				return new int[0];
+			throw ex;
+		}
 	}
-	
-	public void waitFor(String listKey) throws RemoteException, InterruptedException {
+
+	public void waitFor(String listKey, int intervalMs, int tryLimit) throws RemoteException, InterruptedException {
 		GetOperationStatus statusRequest = new GetOperationStatus();
 		AnyKeyType anyKey = new AnyKeyType();
 		anyKey.setAnyKey(listKey);
-		
+
 		statusRequest.setGetOperationStatus(anyKey);
 		StatusType status;
 		long timeStart = System.currentTimeMillis();
-		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
-				|| status == StatusType.eStatus_Queued) {
-			Thread.sleep(10000);
+		int count = 0;
+		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running || status == StatusType.eStatus_Queued) {
+			if (count > tryLimit)
+				break;
+			Thread.sleep(intervalMs);
 			long timeNow = System.currentTimeMillis();
-			log.debug(String.format("Waiting on pug operation. Total duration = %ss",
-					(timeNow - timeStart) / 1000));
+			log.debug(String.format("Waiting on pug operation. Total duration = %ss", (timeNow - timeStart) / 1000));
+			count = count + 1;
 		}
 		if (status != StatusType.eStatus_Success) {
 			GetStatusMessage errorStatusRequest = new GetStatusMessage();
@@ -241,14 +250,14 @@ public class PUGSoapFactory {
 			throw new RuntimeException(getPUG().getStatusMessage(errorStatusRequest).getMessage());
 		}
 	}
-	
+
 	public EntrezKey getEntrezKey(String listKey) throws RemoteException {
 		GetEntrezKey g = new GetEntrezKey();
 		g.setListKey(listKey);
 		GetEntrezKeyResponse resp = pug.getEntrezKey(g);
-        return resp.getEntrezKey();
+		return resp.getEntrezKey();
 	}
-	
+
 	public URL getSDFile(PCIDType type, int[] ids) throws IOException, InterruptedException {
 		ArrayOfInt arr = new ArrayOfInt();
 		arr.set_int(ids);
@@ -269,12 +278,10 @@ public class PUGSoapFactory {
 		statusRequest.setGetOperationStatus(anyKey);
 		StatusType status;
 		long timeStart = System.currentTimeMillis();
-		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running
-				|| status == StatusType.eStatus_Queued) {
+		while ((status = getPUG().getOperationStatus(statusRequest).getStatus()) == StatusType.eStatus_Running || status == StatusType.eStatus_Queued) {
 			Thread.sleep(10000);
 			long timeNow = System.currentTimeMillis();
-			System.out.println(String.format("Waiting on pug operation. Total duration = %ss",
-					(timeNow - timeStart) / 1000));
+			System.out.println(String.format("Waiting on pug operation. Total duration = %ss", (timeNow - timeStart) / 1000));
 		}
 
 		if (status == StatusType.eStatus_Success) {
@@ -289,7 +296,7 @@ public class PUGSoapFactory {
 			throw new RuntimeException(getPUG().getStatusMessage(errorStatusRequest).getMessage());
 		}
 	}
-	
+
 	public URL getSDFilefromCIDs(int[] cids) throws IOException, InterruptedException {
 		return getSDFile(PCIDType.eID_CID, cids);
 	}
