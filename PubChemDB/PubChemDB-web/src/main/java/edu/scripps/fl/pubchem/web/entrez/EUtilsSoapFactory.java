@@ -1,3 +1,5 @@
+package edu.scripps.fl.pubchem.web.entrez;
+
 /*
  * Copyright 2011 The Scripps Research Institute
  *
@@ -13,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.scripps.fl.pubchem.web.entrez;
 
 import gov.nih.nlm.ncbi.www.soap.eutils.EUtilsServiceStub;
 import gov.nih.nlm.ncbi.www.soap.eutils.EUtilsServiceStub.EPostRequest;
@@ -64,8 +65,8 @@ public class EUtilsSoapFactory {
 		EPostRequest request = new EPostRequest();
 		request.setDb(db);
 		request.setId(ids);
-		request.setEmail(EUtilsWebSession.getEmail());
-		request.setTool(EUtilsWebSession.getTool());
+		request.setEmail(System.getProperty("entrez.email"));
+		request.setTool(System.getProperty("entrez.tool"));
 		EPostResult result = getService().run_ePost(request);
 		if (null != result.getERROR())
 			throw new Exception(result.getERROR());
@@ -78,8 +79,8 @@ public class EUtilsSoapFactory {
 		eSearch.setTerm(searchTerm);
 		eSearch.setUsehistory("y");
 		eSearch.setRetMax("0");
-		eSearch.setEmail(EUtilsWebSession.getEmail());
-		eSearch.setTool(EUtilsWebSession.getTool());
+		eSearch.setEmail(System.getProperty("entrez.email"));
+		eSearch.setTool(System.getProperty("entrez.tool"));
 		ESearchResult result = getService().run_eSearch(eSearch);
 		Integer count = Integer.parseInt(result.getCount());
 		if (count < 0)
