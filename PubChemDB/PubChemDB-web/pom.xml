@@ -9,6 +9,7 @@
 	<groupId>edu.scripps</groupId>
 	<artifactId>PubChemDB-web</artifactId>
 	<version>20120628</version>
+	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>gov.nih.nlm.ncbi</groupId>
