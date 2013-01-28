@@ -96,7 +96,7 @@ public class ELinkWebSession extends WebSessionBase {
 		return results;
 	}
 
-	public Map<Long, List<ELinkResult>> getELinkResultsAsMap() throws Exception {
+	public Map<Long, ELinkResult> getELinkResultsAsMap() throws Exception {
 		log.info("getting map from elink session.");
 		Map map = new HashMap();
 		for (ELinkResult result : getELinkResults()) {
